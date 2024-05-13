@@ -123,7 +123,7 @@ fun InnerScreenCurrency() {
                             }
                             Box(
                                 modifier = Modifier.height(600.dp),
-                                contentAlignment = Alignment.Center // Aligns content horizontally and vertically
+                                contentAlignment = Alignment.Center
                             ) {
                                 Scaffold(
                                     backgroundColor = White,
@@ -166,11 +166,11 @@ fun InnerScreenCurrency() {
                                 }
                             }
                         }
-                    }  //breakkk
+                    }
             Row(
                 modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp),
-                horizontalArrangement = Arrangement.Center, // Adjust as needed
-                verticalAlignment = Alignment.CenterVertically // Adjust as needed
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Button(
                     onClick = { /* Nastavi skeniranje */ },
