@@ -14,12 +14,15 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
+import androidx.navigation.NavHostController
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Black
+import com.example.lowvisionaidsbachelorthesis.ui.theme.Gray
 import com.example.lowvisionaidsbachelorthesis.ui.theme.White
 
 @Composable
-fun WelcomeScreen(totalScannedValue: String) {
+fun WelcomeScreen(navController: NavHostController) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Black
@@ -35,13 +38,13 @@ fun WelcomeScreen(totalScannedValue: String) {
                 style = TextStyle(fontSize = 50.sp, fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(top = 40.dp)
             )
-            InnerScreen(totalScannedValue)
+            InnerScreen(navController)
         }
     }
 }
 
 @Composable
-fun InnerScreen(totalScannedValue: String) {
+fun InnerScreen(navController: NavHostController) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Black
@@ -66,7 +69,7 @@ fun InnerScreen(totalScannedValue: String) {
                     Box(
                         modifier = Modifier.fillMaxWidth()
                             .clip(RoundedCornerShape(50.dp)).background(Black)
-                    ){
+                    ) {
                         Column(
                             modifier = Modifier.padding(13.dp),
                             verticalArrangement = Arrangement.Center,
@@ -83,9 +86,12 @@ fun InnerScreen(totalScannedValue: String) {
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Text(
-                                    text = totalScannedValue + " KM",
+                                    text = "100 KM",
                                     color = White,
-                                    style = TextStyle(fontSize = 50.sp, fontWeight = FontWeight.Bold),
+                                    style = TextStyle(
+                                        fontSize = 50.sp,
+                                        fontWeight = FontWeight.Bold
+                                    ),
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier.padding(8.dp)
                                 )
@@ -122,7 +128,6 @@ fun InnerScreen(totalScannedValue: String) {
                     }
                 }
             }
-
         }
     }
 }

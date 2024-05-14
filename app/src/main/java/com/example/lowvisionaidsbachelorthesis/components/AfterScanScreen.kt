@@ -13,12 +13,16 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Black
 import com.example.lowvisionaidsbachelorthesis.ui.theme.White
 
+@Preview
 @Composable
-fun AfterScanScreen(totalScannedValue: String) {
+fun AfterScanScreen(navController: NavHostController) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Black
@@ -66,7 +70,7 @@ fun AfterScanScreen(totalScannedValue: String) {
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
                                     Text(
-                                        text = totalScannedValue + " KM",
+                                        text = "100 KM",
                                         color = White,
                                         style = TextStyle(fontSize = 50.sp, fontWeight = FontWeight.Bold),
                                         textAlign = TextAlign.Center,

@@ -13,15 +13,18 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Black
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Gray
 import com.example.lowvisionaidsbachelorthesis.ui.theme.White
 
-@Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+
 @Composable
-fun ConversionScreen() {
+fun ConversionScreen(navController: NavHostController) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Black
@@ -85,7 +88,7 @@ fun ConversionScreen() {
                         }
                         Spacer(modifier = Modifier.height(35.dp))
                         Button(
-                            onClick = { /* Nastavi skeniranje */ },
+                            onClick = { navController.navigate("CurrenciesListScreen") },
                             modifier = Modifier.fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(Black),
                             shape = RoundedCornerShape(8.dp)
@@ -97,8 +100,6 @@ fun ConversionScreen() {
                                 style = TextStyle(fontSize = 17.sp)
                             )
                         }
-
-                        ////////
                         Spacer(modifier = Modifier.height(400.dp))
                         Row(
                             modifier = Modifier
@@ -108,7 +109,7 @@ fun ConversionScreen() {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Button(
-                                onClick = { /* Nastavi skeniranje */ },
+                                onClick = { navController.navigate("WelcomeScreen") },
                                 modifier = Modifier
                                     .width(165.dp)
                                     .height(70.dp),
@@ -129,7 +130,8 @@ fun ConversionScreen() {
                             }
                             Spacer(Modifier.width(2.dp))
                             Button(
-                                onClick = { /* Novo skeniranje */ },
+                                onClick = {},
+                                enabled = false,
                                 modifier = Modifier
                                     .width(165.dp)
                                     .height(70.dp),
@@ -138,7 +140,7 @@ fun ConversionScreen() {
                             ) {
                                 Text(
                                     text = "Konverzija",
-                                    color = White,
+                                    color = Black,
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(start = 15.dp),
@@ -150,7 +152,6 @@ fun ConversionScreen() {
                         }
                     }
                 }
-
             }
         }
     }
