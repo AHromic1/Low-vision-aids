@@ -43,11 +43,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.example.lowvisionaidsbachelorthesis.ExchangeRatesViewModel
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Gray
 
+@Preview
 @Composable
-fun CurrenciesListScreen(navController: NavHostController, viewModel: ExchangeRatesViewModel) {
+fun CurrenciesListScreen2() {
 
 
     Surface(
@@ -65,21 +65,14 @@ fun CurrenciesListScreen(navController: NavHostController, viewModel: ExchangeRa
                 style = TextStyle(fontSize = 30.sp, fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(top = 40.dp)
             )
-            InnerScreenCurrency(navController, viewModel)
+            InnerScreenCurrency2()
         }
     }
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun InnerScreenCurrency(navController: NavHostController, viewModel: ExchangeRatesViewModel) {
-
-    LaunchedEffect(Unit) {
-        val viewModelClass = ExchangeRatesViewModel()
-
-        println("LAUNCHEDDDD: ${viewModelClass.rates}")
-        //viewModel.fetchExchangeRates("BAM")
-    }
+fun InnerScreenCurrency2() {
     Surface(
         shape = RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp),
         modifier = Modifier.fillMaxSize(),
@@ -92,12 +85,11 @@ fun InnerScreenCurrency(navController: NavHostController, viewModel: ExchangeRat
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = CenterHorizontally
         ) {
-             Box(
+            Box(
                 modifier = Modifier
                     .fillMaxHeight()
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp))
-                    .background(White)
+                    .clip(RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp)).background(White)
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp),
@@ -114,7 +106,7 @@ fun InnerScreenCurrency(navController: NavHostController, viewModel: ExchangeRat
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = CenterHorizontally
                         ) {  //search bar
-                            Link()
+                            Link2()
                             var searchText by remember { mutableStateOf(TextFieldValue()) }
                             val currencies = arrayOf(
                                 "USD",  // United States Dollar
@@ -146,9 +138,7 @@ fun InnerScreenCurrency(navController: NavHostController, viewModel: ExchangeRat
                                     topBar = {
                                         TopAppBar(
                                             backgroundColor = Gray,
-                                            modifier = Modifier
-                                                .padding(0.dp, 10.dp)
-                                                .fillMaxWidth(),
+                                            modifier = Modifier.padding(0.dp, 10.dp).fillMaxWidth(),
                                             title = {
                                                 androidx.compose.material.TextField(
                                                     value = searchText,
@@ -186,63 +176,53 @@ fun InnerScreenCurrency(navController: NavHostController, viewModel: ExchangeRat
                         }
                     }
                     Spacer(Modifier.width(10.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 10.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Button(
-                    onClick = { navController.navigate("WelcomeScreen") },
-                    modifier = Modifier
-                        .width(165.dp)
-                        .height(70.dp),
-                    colors = ButtonDefaults.buttonColors(Black),
-                    shape = RoundedCornerShape(bottomStart = 20.dp, topStart = 20.dp, topEnd = 90.dp)
-                ) {
-                    Text(
-                        text = "Skeniranje",
-                        color = White,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(end = 15.dp),
-                        style = TextStyle(
-                            fontSize = 22.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    )
-                }
-                Spacer(Modifier.width(2.dp))
-                Button(
-                    onClick = { },
-                    enabled = false,
-                    modifier = Modifier
-                        .width(165.dp)
-                        .height(70.dp),
-                    colors = ButtonDefaults.buttonColors(Gray),
-                    shape = RoundedCornerShape(bottomStart = 90.dp, topEnd = 20.dp, bottomEnd = 20.dp)
-                ) {
-                    Text(
-                        text = "Konverzija",
-                        color = Black,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 15.dp),
-                        style = TextStyle(
-                            fontSize = 22.sp,
-                            textAlign = TextAlign.Center)
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Button(
+                            onClick = { },
+                            modifier = Modifier.width(165.dp).height(70.dp),
+                            colors = ButtonDefaults.buttonColors(Black),
+                            shape = RoundedCornerShape(bottomStart = 20.dp, topStart = 20.dp, topEnd = 90.dp)
+                        ) {
+                            Text(
+                                text = "Skeniranje",
+                                color = White,
+                                modifier = Modifier.fillMaxWidth().padding(end = 15.dp),
+                                style = TextStyle(
+                                    fontSize = 22.sp,
+                                    textAlign = TextAlign.Center
+                                )
+                            )
+                        }
+                        Spacer(Modifier.width(2.dp))
+                        Button(
+                            onClick = { },
+                            enabled = false,
+                            modifier = Modifier.width(165.dp).height(70.dp),
+                            colors = ButtonDefaults.buttonColors(Gray),
+                            shape = RoundedCornerShape(bottomStart = 90.dp, topEnd = 20.dp, bottomEnd = 20.dp)
+                        ) {
+                            Text(
+                                text = "Konverzija",
+                                color = Black,
+                                modifier = Modifier.fillMaxWidth().padding(start = 15.dp),
+                                style = TextStyle(
+                                    fontSize = 22.sp,
+                                    textAlign = TextAlign.Center)
+                            )
+                        }
                     }
                 }
-                }
-             }
+            }
         }
     }
 }
 
 @Composable
-fun SearchResultItem(text: String, isLastItem: Boolean) {
+fun SearchResultItem2(text: String, isLastItem: Boolean) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -260,11 +240,11 @@ fun SearchResultItem(text: String, isLastItem: Boolean) {
 
 //attributions
 @Composable
-fun Link() {
+fun Link2() {
     val mAnnotatedLinkString = buildAnnotatedString {
 
         //val mStr = "Rates By Exchange Rate API"
-        val mStr = "Rates By Exchange Rate API: www.exchangerate-api.com"
+        val mStr = "Rates By Exchange Rate API: https://www.exchangerate-api.com"
         val mStartIndex = mStr.indexOf("Rates")
         val mEndIndex = mStartIndex + 26
 
@@ -273,7 +253,7 @@ fun Link() {
             style = SpanStyle(
                 color = Black,
                 //textDecoration = TextDecoration.Underline,
-                fontSize = 8.sp
+                fontSize = 15.sp
             ), start = mStartIndex, end = mEndIndex
         )
 
