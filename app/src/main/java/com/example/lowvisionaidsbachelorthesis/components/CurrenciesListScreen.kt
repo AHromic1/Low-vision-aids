@@ -46,9 +46,24 @@ import androidx.navigation.NavHostController
 import com.example.lowvisionaidsbachelorthesis.ExchangeRatesViewModel
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Gray
 
+import androidx.compose.runtime.livedata.observeAsState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+
 @Composable
 fun CurrenciesListScreen(navController: NavHostController, viewModel: ExchangeRatesViewModel) {
 
+    val exchangeRatesState = remember { mutableStateOf<Map<String, Double>?>(null) }
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchExchangeRates("BAM") // Base currency can be changed
+        exchangeRatesState.value = viewModel.exchangeRates.value
+        println("FETCHED: ${exchangeRatesState.value}")
+    }
+
+    val exchangeRates by viewModel.exchangeRates.observeAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -60,26 +75,32 @@ fun CurrenciesListScreen(navController: NavHostController, viewModel: ExchangeRa
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Odaberite željenu valutu",
+            Text(
+                text = "Odaberite željenu valutu",
                 color = White,
                 style = TextStyle(fontSize = 30.sp, fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(top = 40.dp)
             )
-            InnerScreenCurrency(navController, viewModel)
+            InnerScreenCurrency(navController, exchangeRates)
         }
     }
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun InnerScreenCurrency(navController: NavHostController, viewModel: ExchangeRatesViewModel) {
+fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<String, Double>?) {
+    var searchText by remember { mutableStateOf(TextFieldValue()) }
 
-    LaunchedEffect(Unit) {
-        val viewModelClass = ExchangeRatesViewModel()
+    // Create a list of currency codes from the observed exchange rates
+    val currencyCodes = exchangeRates?.keys?.toList() ?: emptyList()
 
-        println("LAUNCHEDDDD: ${viewModelClass.rates}")
-        //viewModel.fetchExchangeRates("BAM")
+    // Filter the currency codes based on the search text
+    val filteredCurrencies = remember(searchText.text) {
+        currencyCodes.filter {
+            it.contains(searchText.text, ignoreCase = true)
+        }
     }
+
     Surface(
         shape = RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp),
         modifier = Modifier.fillMaxSize(),
@@ -92,7 +113,7 @@ fun InnerScreenCurrency(navController: NavHostController, viewModel: ExchangeRat
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = CenterHorizontally
         ) {
-             Box(
+            Box(
                 modifier = Modifier
                     .fillMaxHeight()
                     .fillMaxWidth()
@@ -104,150 +125,134 @@ fun InnerScreenCurrency(navController: NavHostController, viewModel: ExchangeRat
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = CenterHorizontally
                 ) {
-
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                    ) {    //search bar
+                    ) {
                         Column(
                             modifier = Modifier.padding(13.dp),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = CenterHorizontally
-                        ) {  //search bar
+                        ) {
                             Link()
-                            var searchText by remember { mutableStateOf(TextFieldValue()) }
-                            val currencies = arrayOf(
-                                "USD",  // United States Dollar
-                                "EUR",  // Euro
-                                "GBP",  // British Pound Sterling
-                                "JPY",  // Japanese Yen
-                                "CAD",  // Canadian Dollar
-                                "AUD",  // Australian Dollar
-                                "CHF",  // Swiss Franc
-                                "CNY",  // Chinese Yuan
-                                "INR",  // Indian Rupee
-                                "SGD"   // Singapore Dollar
-                            )
 
-                            val filteredCurrencies = remember(searchText) {
-                                currencies.filter {
-                                    it.contains(
-                                        searchText.text,
-                                        ignoreCase = true
+                            Scaffold(
+                                backgroundColor = White,
+                                topBar = {
+                                    TopAppBar(
+                                        backgroundColor = Gray,
+                                        modifier = Modifier
+                                            .padding(0.dp, 10.dp)
+                                            .fillMaxWidth(),
+                                        title = {
+                                            androidx.compose.material.TextField(
+                                                value = searchText,
+                                                onValueChange = { searchText = it },
+                                                placeholder = { Text("Search") },
+                                                modifier = Modifier.fillMaxWidth(),
+                                                leadingIcon = {
+                                                    androidx.compose.material.Icon(
+                                                        Icons.Filled.Search,
+                                                        contentDescription = null
+                                                    )
+                                                },
+                                                textStyle = TextStyle(color = White)
+                                            )
+                                        }
                                     )
                                 }
-                            }
-                            Box(
-                                modifier = Modifier.height(560.dp),
-                                contentAlignment = Alignment.Center
                             ) {
-                                Scaffold(
-                                    backgroundColor = White,
-                                    topBar = {
-                                        TopAppBar(
-                                            backgroundColor = Gray,
-                                            modifier = Modifier
-                                                .padding(0.dp, 10.dp)
-                                                .fillMaxWidth(),
-                                            title = {
-                                                androidx.compose.material.TextField(
-                                                    value = searchText,
-                                                    onValueChange = { searchText = it },
-                                                    placeholder = { Text("Search") },
-                                                    modifier = Modifier.fillMaxWidth(),
-                                                    leadingIcon = {
-                                                        androidx.compose.material.Icon(
-                                                            Icons.Filled.Search,
-                                                            contentDescription = null
-                                                        )
-                                                    },
-                                                    textStyle = TextStyle(color = White)
-                                                )
-                                            }
-                                        )
-                                    }
+                                Box(
+                                    modifier = Modifier.fillMaxSize()
                                 ) {
-                                    Box(
-                                        modifier = Modifier.fillMaxSize()
+                                    LazyColumn(
+                                        modifier = Modifier.height(480.dp)
                                     ) {
-                                        LazyColumn(
-                                            modifier = Modifier.height(480.dp)
-                                        ) {
-                                            items(filteredCurrencies.size) { index ->
-                                                SearchResultItem(
-                                                    text = filteredCurrencies[index],
-                                                    isLastItem = index == filteredCurrencies.lastIndex
-                                                )
-                                            }
+                                        items(filteredCurrencies.size) { index ->
+                                            SearchResultItem(
+                                                text = filteredCurrencies[index],
+                                                isLastItem = index == filteredCurrencies.lastIndex,
+                                                onClick = {
+                                                    println("Clicked on currency: ${filteredCurrencies[index]}")
+                                                    navController.navigate("ConversionScreen/${exchangeRates?.get(filteredCurrencies[index])}")
+                                                }
+                                            )
                                         }
+
+                                        println("FILTERED CURRENCIES $filteredCurrencies")
                                     }
                                 }
                             }
                         }
                     }
+
                     Spacer(Modifier.width(10.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 10.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Button(
-                    onClick = { navController.navigate("WelcomeScreen") },
-                    modifier = Modifier
-                        .width(165.dp)
-                        .height(70.dp),
-                    colors = ButtonDefaults.buttonColors(Black),
-                    shape = RoundedCornerShape(bottomStart = 20.dp, topStart = 20.dp, topEnd = 90.dp)
-                ) {
-                    Text(
-                        text = "Skeniranje",
-                        color = White,
+
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(end = 15.dp),
-                        style = TextStyle(
-                            fontSize = 22.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    )
-                }
-                Spacer(Modifier.width(2.dp))
-                Button(
-                    onClick = { },
-                    enabled = false,
-                    modifier = Modifier
-                        .width(165.dp)
-                        .height(70.dp),
-                    colors = ButtonDefaults.buttonColors(Gray),
-                    shape = RoundedCornerShape(bottomStart = 90.dp, topEnd = 20.dp, bottomEnd = 20.dp)
-                ) {
-                    Text(
-                        text = "Konverzija",
-                        color = Black,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 15.dp),
-                        style = TextStyle(
-                            fontSize = 22.sp,
-                            textAlign = TextAlign.Center)
-                    )
+                            .padding(bottom = 10.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Button(
+                            onClick = { navController.navigate("WelcomeScreen") },
+                            modifier = Modifier
+                                .width(165.dp)
+                                .height(70.dp),
+                            colors = ButtonDefaults.buttonColors(Black),
+                            shape = RoundedCornerShape(bottomStart = 20.dp, topStart = 20.dp, topEnd = 90.dp)
+                        ) {
+                            Text(
+                                text = "Skeniranje",
+                                color = White,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(end = 15.dp),
+                                style = TextStyle(
+                                    fontSize = 22.sp,
+                                    textAlign = TextAlign.Center
+                                )
+                            )
+                        }
+
+                        Spacer(Modifier.width(2.dp))
+
+                        Button(
+                            onClick = { },
+                            enabled = false,
+                            modifier = Modifier
+                                .width(165.dp)
+                                .height(70.dp),
+                            colors = ButtonDefaults.buttonColors(Gray),
+                            shape = RoundedCornerShape(bottomStart = 90.dp, topEnd = 20.dp, bottomEnd = 20.dp)
+                        ) {
+                            Text(
+                                text = "Konverzija",
+                                color = Black,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 15.dp),
+                                style = TextStyle(
+                                    fontSize = 22.sp,
+                                    textAlign = TextAlign.Center)
+                            )
+                        }
                     }
                 }
-                }
-             }
+            }
         }
     }
 }
 
 @Composable
-fun SearchResultItem(text: String, isLastItem: Boolean) {
+fun SearchResultItem(text: String, isLastItem: Boolean, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .then(if (!isLastItem) Modifier.padding(bottom = 8.dp) else Modifier),
+            .then(if (!isLastItem) Modifier.padding(bottom = 8.dp) else Modifier)
+            .clickable { onClick() },
         elevation = 4.dp
     ) {
         Text(
@@ -257,6 +262,7 @@ fun SearchResultItem(text: String, isLastItem: Boolean) {
         )
     }
 }
+
 
 //attributions
 @Composable

@@ -4,8 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.example.lowvisionaidsbachelorthesis.components.*
 import com.example.lowvisionaidsbachelorthesis.ui.theme.PrimaryTheme
@@ -36,8 +38,12 @@ class MainActivity : ComponentActivity() {
                 composable("CurrenciesListScreen") {
                     CurrenciesListScreen(navController = navController, viewModel = exchangeRatesViewModel)
                 }
-                composable("ConversionScreen") {
-                    ConversionScreen(navController = navController)
+                composable(
+                    "ConversionScreen/{value}",
+                    arguments = listOf(navArgument("value") { type = NavType.FloatType })
+                ) { backStackEntry ->
+                    val value = backStackEntry.arguments?.getFloat("value") ?: 0.0f
+                    ConversionScreen(navController = navController, value.toDouble())
                 }
             }
         }

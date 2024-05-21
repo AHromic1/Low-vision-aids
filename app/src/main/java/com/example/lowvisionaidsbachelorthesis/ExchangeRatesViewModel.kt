@@ -10,8 +10,7 @@ import retrofit2.HttpException
 
 class ExchangeRatesViewModel : ViewModel() {
 
-    val _exchangeRates = MutableLiveData<Map<String, Double>>()
-    var rates : Map<String, Double>? = null
+    private val _exchangeRates = MutableLiveData<Map<String, Double>>()
     val exchangeRates: LiveData<Map<String, Double>> = _exchangeRates
 
     fun fetchExchangeRates(baseCurrency: String) {
@@ -19,14 +18,10 @@ class ExchangeRatesViewModel : ViewModel() {
             try {
                 val response = ExchangeRatesRetrofit.api.getLatestRates(baseCurrency)
                 _exchangeRates.postValue(response.rates)
-
-                rates = response.rates
-
-                println("RESPONSE RESULT:")
+              /*  println("RESPONSE RESULT:")
                 response.rates.forEach { (currency, rate) ->
                     println("$currency: $rate")
-                }
-
+                }*/
             } catch (e: HttpException) {
                 // Handle HTTP exceptions
             } catch (e: Exception) {

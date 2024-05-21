@@ -22,9 +22,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import java.math.RoundingMode
+import java.math.BigDecimal
+
 
 @Composable
-fun ConversionScreen(navController: NavHostController) {
+fun ConversionScreen(navController: NavHostController, value: Double = 0.0) {
+    val BD = BigDecimal(value)
+    val roundedValue = BD.setScale(2, RoundingMode.CEILING)
+    println("ROUNDED $roundedValue")
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Black
@@ -77,7 +84,8 @@ fun ConversionScreen(navController: NavHostController) {
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
                                     Text(
-                                        text =  " KM",
+
+                                        text = "$roundedValue KM",
                                         color = White,
                                         style = TextStyle(fontSize = 50.sp, fontWeight = FontWeight.Bold),
                                         textAlign = TextAlign.Center,
