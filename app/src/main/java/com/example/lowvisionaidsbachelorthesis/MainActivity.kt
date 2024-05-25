@@ -9,17 +9,53 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
+//import androidx.room.Room
 import com.example.lowvisionaidsbachelorthesis.components.*
-import com.example.lowvisionaidsbachelorthesis.ui.theme.PrimaryTheme
+import com.example.lowvisionaidsbachelorthesis.database.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
+import android.content.Context
+import android.content.res.Configuration
+import androidx.lifecycle.lifecycleScope
+//import com.example.lowvisionaidsbachelorthesis.database.ScannedMoneyRepository.Companion.writeToDB
+
+
+import kotlinx.coroutines.launch
+
 
 class MainActivity : ComponentActivity() {
-    // Create an instance of ExchangeRatesViewModel
     private val exchangeRatesViewModel by viewModels<ExchangeRatesViewModel>()
+
+/*private fun addToDatabase(value: ScannedMoney) {
+    lifecycleScope.launch {
+        try {
+            val result = writeToDB(applicationContext, value)
+            println("Write to DB result: $result")
+        } catch (error: Throwable) {
+            println("Error: ${error.message}")
+            error.printStackTrace()
+        }
+    }
+}*/
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Fetch exchange rates when MainActivity is created
+
+        ////database test
+       /* lifecycleScope.launch {
+            val scannedMoney = ScannedMoney(1, 100.0)
+            addToDatabase(scannedMoney)
+        }*/
+
+
+
+      //  println("TOTAL VALUE2 $totalValue")
+
+        /////
+
         exchangeRatesViewModel.fetchExchangeRates("BAM")
 
         setContent {
@@ -48,4 +84,9 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+   /* private fun addScannedMoney() {
+        val scannedMoney = ScannedMoney(0,  100.0)
+        scannedMoneyViewModel.insert(scannedMoney)
+    }*/
 }

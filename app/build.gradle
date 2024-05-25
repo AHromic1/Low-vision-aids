@@ -1,16 +1,18 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+
 }
 
 android {
     namespace 'com.example.lowvisionaidsbachelorthesis'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.lowvisionaidsbachelorthesis"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -74,6 +76,13 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
     implementation "androidx.compose.runtime:runtime-livedata:1.2.0"
+
+
+  /*  implementation("androidx.room:room-runtime:2.5.2")
+    annotationProcessor "androidx.room:room-compiler:2.5.2"
+    implementation("androidx.room:room-ktx:2.5.2")
+    kapt("androidx.room:room-compiler:2.5.2")   */
+
 
 
 }
