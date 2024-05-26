@@ -6,9 +6,11 @@
     <string name="new_scan">New scan</string>
     <string name="scanning_bttn">Scan - click to open a scanning screen</string>
     <string name="conversion_bttn">Convert - click to open a conversion screen</string>
-    <string name="choose_currency">Choose the currency to which you wish to convert the scanned value</string>
+    <string name="choose_currency">Choose the currency code to which you wish to convert the scanned value</string>
+    <string name="search_for_currency">Search for the currency code to which you wish to convert the scanned value</string>
     <string name="converted_value">Converted value is </string>
     <string name="new_conversion">New conversion</string>
+    <string name="KM" translatable="false">K M</string>
 
 
 </resources>

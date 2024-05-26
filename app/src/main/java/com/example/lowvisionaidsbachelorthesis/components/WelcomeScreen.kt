@@ -2,6 +2,7 @@ package com.example.lowvisionaidsbachelorthesis.components
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.runtime.Composable
@@ -11,15 +12,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.navigation.NavHostController
+import com.example.lowvisionaidsbachelorthesis.R
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Black
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Gray
 import com.example.lowvisionaidsbachelorthesis.ui.theme.White
+
 
 @Composable
 fun WelcomeScreen(navController: NavHostController) {
@@ -28,23 +32,28 @@ fun WelcomeScreen(navController: NavHostController) {
         color = Black
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Dobro došli!",
+            Text(
+                text = "Dobro došli!",
                 color = White,
                 style = TextStyle(fontSize = 50.sp, fontWeight = FontWeight.Bold),
-                modifier = Modifier.padding(top = 40.dp)
+                modifier = Modifier
+                    .padding(top = 40.dp)
+                    .clickable(
+                        onClickLabel = stringResource(R.string.welcome),
+                        onClick = { }
+                    )
             )
             InnerScreen(navController)
         }
     }
 }
-
 @Composable
 fun InnerScreen(navController: NavHostController) {
+    val KMString = stringResource(R.string.KM)
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Black
@@ -86,12 +95,16 @@ fun InnerScreen(navController: NavHostController) {
                                 style = TextStyle(fontSize = 20.sp),
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.padding(start = 35.dp, end = 35.dp, top = 15.dp)
+                                    .clickable(
+                                    onClickLabel = stringResource(R.string.total_scanned_value),
+                                    onClick = { }
+                                )
                             )
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Text(
-                                    text = "100 KM",
+                                    text = "100 $KMString",
                                     color = White,
                                     style = TextStyle(
                                         fontSize = 50.sp,
@@ -106,7 +119,11 @@ fun InnerScreen(navController: NavHostController) {
                     Spacer(modifier = Modifier.height(35.dp))
                     Button(
                         onClick = { /* Nastavi skeniranje */ },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth()
+                            .clickable(
+                            onClickLabel = stringResource(R.string.continue_scanning),
+                            onClick = {}
+                        ),
                         colors = ButtonDefaults.buttonColors(Black),
                         shape = RoundedCornerShape(8.dp)
                     ) {
@@ -120,7 +137,11 @@ fun InnerScreen(navController: NavHostController) {
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
                         onClick = { /* Novo skeniranje */ },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth()
+                            .clickable(
+                                onClickLabel = stringResource(R.string.new_scan),
+                                onClick = {}
+                            ),
                         colors = ButtonDefaults.buttonColors(Black),
                         shape = RoundedCornerShape(8.dp)
                     ) {

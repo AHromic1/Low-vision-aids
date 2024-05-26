@@ -39,7 +39,9 @@ import com.example.lowvisionaidsbachelorthesis.exchangeRatesAPI.ExchangeRatesVie
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Gray
 
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.res.stringResource
 import com.example.lowvisionaidsbachelorthesis.MainActivity
+import com.example.lowvisionaidsbachelorthesis.R
 
 
 @Composable
@@ -134,7 +136,11 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                                         backgroundColor = Gray,
                                         modifier = Modifier
                                             .padding(0.dp, 10.dp)
-                                            .fillMaxWidth(),
+                                            .fillMaxWidth()
+                                            .clickable(
+                                                onClickLabel = stringResource(R.string.search_for_currency),
+                                                onClick = { }
+                                            ),
                                         title = {
                                             androidx.compose.material.TextField(
                                                 value = searchText,
@@ -223,15 +229,23 @@ fun BottomNavigation(navController: NavHostController, screenActivity: String){
         conversionButtonColor = Gray
         conversionTextColor = Black
     }
-    //Spacer(Modifier.height(80.dp))
+
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .clickable(
+                onClickLabel = stringResource(R.string.conversion_bttn),
+                onClick = {}
+            ),
         contentAlignment = Alignment.BottomCenter
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 20.dp),
+                .padding(bottom = 20.dp)
+                .clickable(
+                    onClickLabel = stringResource(R.string.conversion_bttn),
+                    onClick = {}
+                ),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -239,7 +253,11 @@ fun BottomNavigation(navController: NavHostController, screenActivity: String){
                 onClick = { navController.navigate("WelcomeScreen") },
                 modifier = Modifier
                     .width(180.dp)
-                    .height(70.dp),
+                    .height(70.dp)
+                    .clickable(
+                        onClickLabel = stringResource(R.string.scanning_bttn),
+                        onClick = {}
+                    ),
                 enabled = scanningEnabled,
                 colors = ButtonDefaults.buttonColors(scanningButtonColor),
                 shape = RoundedCornerShape(bottomStart = 20.dp, topStart = 20.dp, topEnd = 90.dp)
@@ -264,7 +282,11 @@ fun BottomNavigation(navController: NavHostController, screenActivity: String){
                 enabled = conversionEnabled,
                 modifier = Modifier
                     .width(180.dp)
-                    .height(70.dp),
+                    .height(70.dp)
+                    .clickable(
+                        onClickLabel = stringResource(R.string.conversion_bttn),
+                        onClick = {}
+                    ),
                 colors = ButtonDefaults.buttonColors(conversionButtonColor),
                 shape = RoundedCornerShape(bottomStart = 90.dp, topEnd = 20.dp, bottomEnd = 20.dp)
             ) {

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -30,6 +31,7 @@ import java.time.format.DateTimeFormatter
 
 class MainActivity : ComponentActivity() {
     private val exchangeRatesViewModel by viewModels<ExchangeRatesViewModel>()
+    lateinit var textToSpeech: TextToSpeech
 
 /*private fun addToDatabase(value: ScannedMoney) {
     lifecycleScope.launch {
@@ -49,6 +51,8 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //textToSpeech = TextToSpeech(this, this)
 
         dateTime = LocalDateTime.now()
         println("DATE AND TIME IS: $dateTime")
