@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">Lowvision aids bachelor thesis</string>
+    <string name="app_name">Money counting and conversion app</string>
+    <string name="welcome">Welcome</string>
+    <string name="total_scanned_value">Total scanned value is</string>
+    <string name="continue_scanning">Continue scanning</string>
+    <string name="new_scan">New scan</string>
+    <string name="scanning_bttn">Scan - click to open a scanning screen</string>
+    <string name="conversion_bttn">Convert - click to open a conversion screen</string>
+    <string name="choose_currency">Choose the currency to which you wish to convert the scanned value</string>
+    <string name="converted_value">Converted value is </string>
+    <string name="new_conversion">New conversion</string>
+
+
 </resources>
