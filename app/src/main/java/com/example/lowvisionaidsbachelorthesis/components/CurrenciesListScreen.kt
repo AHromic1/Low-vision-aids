@@ -45,7 +45,7 @@ import com.example.lowvisionaidsbachelorthesis.MainActivity
 @Composable
 fun CurrenciesListScreen(navController: NavHostController, exchangeRates: Map<String, Double>?) {
 
-    val exchangeRatesState = remember { mutableStateOf<Map<String, Double>?>(null) }
+    //val exchangeRatesState = remember { mutableStateOf<Map<String, Double>?>(null) }
 
    /* LaunchedEffect(Unit) {
         viewModel.fetchExchangeRates("BAM")
@@ -157,77 +157,24 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                                     modifier = Modifier.fillMaxSize()
                                 ) {
                                     LazyColumn(
-                                        modifier = Modifier.height(480.dp)
+                                        modifier = Modifier.height(400.dp)
                                     ) {
                                         items(filteredCurrencies.size) { index ->
                                             SearchResultItem(
                                                 text = filteredCurrencies[index],
                                                 isLastItem = index == filteredCurrencies.lastIndex,
                                                 onClick = {
-                                                    println("Clicked on currency: ${filteredCurrencies[index]}")
+                                                    //println("Clicked on currency: ${filteredCurrencies[index]}")
                                                     navController.navigate("ConversionScreen/${exchangeRates?.get(filteredCurrencies[index])}")
                                                 }
                                             )
                                         }
 
-                                        println("FILTERED CURRENCIES $filteredCurrencies")
+                                        //println("FILTERED CURRENCIES $filteredCurrencies")
                                     }
+                                    BottomNavigation(navController = navController, "conversion")
                                 }
                             }
-                        }
-                    }
-
-                    //Spacer(Modifier.width(10.dp))
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 10.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Button(
-                            onClick = { navController.navigate("WelcomeScreen") },
-                            modifier = Modifier
-                                .width(165.dp)
-                                .height(70.dp),
-                            colors = ButtonDefaults.buttonColors(Black),
-                            shape = RoundedCornerShape(bottomStart = 20.dp, topStart = 20.dp, topEnd = 90.dp)
-                        ) {
-                            Text(
-                                text = "Skeniranje",
-                                color = White,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(end = 15.dp),
-                                style = TextStyle(
-                                    fontSize = 22.sp,
-                                    textAlign = TextAlign.Center
-                                )
-                            )
-                        }
-
-                        Spacer(Modifier.width(2.dp))
-
-                        Button(
-                            onClick = { },
-                            enabled = false,
-                            modifier = Modifier
-                                .width(165.dp)
-                                .height(70.dp),
-                            colors = ButtonDefaults.buttonColors(Gray),
-                            shape = RoundedCornerShape(bottomStart = 90.dp, topEnd = 20.dp, bottomEnd = 20.dp)
-                        ) {
-                            Text(
-                                text = "Konverzija",
-                                color = Black,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 15.dp),
-                                style = TextStyle(
-                                    fontSize = 22.sp,
-                                    textAlign = TextAlign.Center)
-                            )
                         }
                     }
                 }
@@ -255,13 +202,79 @@ fun SearchResultItem(text: String, isLastItem: Boolean, onClick: () -> Unit) {
 }
 
 
+@Composable
+fun BottomNavigation(navController: NavHostController, screenActivity: String){
+    var conversionEnabled: Boolean = true
+    var scanningEnabled: Boolean = true
+
+    if(screenActivity == "scanning") scanningEnabled = false
+    if(screenActivity == "conversion") conversionEnabled = false
+    //Spacer(Modifier.height(80.dp))
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 20.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(
+                onClick = { navController.navigate("WelcomeScreen") },
+                modifier = Modifier
+                    .width(180.dp)
+                    .height(70.dp),
+                enabled = scanningEnabled,
+                colors = ButtonDefaults.buttonColors(Black),
+                shape = RoundedCornerShape(bottomStart = 20.dp, topStart = 20.dp, topEnd = 90.dp)
+            ) {
+                Text(
+                    text = "Skeniranje",
+                    color = White,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 15.dp),
+                    style = TextStyle(
+                        fontSize = 21.sp,
+                        textAlign = TextAlign.Center
+                    )
+                )
+            }
+
+            Spacer(Modifier.width(2.dp))
+
+            Button(
+                onClick = { },
+                enabled = conversionEnabled,
+                modifier = Modifier
+                    .width(180.dp)
+                    .height(70.dp),
+                colors = ButtonDefaults.buttonColors(Gray),
+                shape = RoundedCornerShape(bottomStart = 90.dp, topEnd = 20.dp, bottomEnd = 20.dp)
+            ) {
+                Text(
+                    text = "Konverzija",
+                    color = Black,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 15.dp),
+                    style = TextStyle(
+                        fontSize = 21.sp,
+                        textAlign = TextAlign.Center)
+                )
+            }
+        }
+    }
+}
 //attributions
 @Composable
 fun Link() {
     val mAnnotatedLinkString = buildAnnotatedString {
 
         //val mStr = "Rates By Exchange Rate API"
-        val mStr = "Rates By Exchange Rate API: www.exchangerate-api.com"
+        val mStr = "Rates By Exchange Rate API www.exchangerate-api.com"
         val mStartIndex = mStr.indexOf("Rates")
         val mEndIndex = mStartIndex + 26
 

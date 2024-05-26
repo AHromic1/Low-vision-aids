@@ -108,56 +108,8 @@ fun ConversionScreen(navController: NavHostController, value: Double = 0.0) {
                                 style = TextStyle(fontSize = 17.sp)
                             )
                         }
-                        Spacer(modifier = Modifier.height(400.dp))
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 10.dp),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Button(
-                                onClick = { navController.navigate("WelcomeScreen") },
-                                modifier = Modifier
-                                    .width(165.dp)
-                                    .height(70.dp),
-                                colors = ButtonDefaults.buttonColors(Black),
-                                shape = RoundedCornerShape(bottomStart = 20.dp, topStart = 20.dp, topEnd = 90.dp)
-                            ) {
-                                Text(
-                                    text = "Skeniranje",
-                                    color = White,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(end = 15.dp),
-                                    style = TextStyle(
-                                        fontSize = 22.sp,
-                                        textAlign = TextAlign.Center
-                                    )
-                                )
-                            }
-                            Spacer(Modifier.width(2.dp))
-                            Button(
-                                onClick = {},
-                                enabled = false,
-                                modifier = Modifier
-                                    .width(165.dp)
-                                    .height(70.dp),
-                                colors = ButtonDefaults.buttonColors(Gray),
-                                shape = RoundedCornerShape(bottomStart = 90.dp, topEnd = 20.dp, bottomEnd = 20.dp)
-                            ) {
-                                Text(
-                                    text = "Konverzija",
-                                    color = Black,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(start = 15.dp),
-                                    style = TextStyle(
-                                        fontSize = 22.sp,
-                                        textAlign = TextAlign.Center)
-                                )
-                            }
-                        }
+                        //Spacer(modifier = Modifier.height(400.dp))
+                        BottomNavigation(navController = navController, screenActivity = "conversion")
                     }
                 }
             }

@@ -55,15 +55,15 @@ class MainActivity : ComponentActivity() {
 
         lifecycleScope.launch {
             val sharedPreferences: CustomSharedPreferences = CustomSharedPreferences(applicationContext)
-            println("is it true ${hasOneDayElapsed(sharedPreferences)}")
+            //println("is it true ${hasOneDayElapsed(sharedPreferences)}")
             if(hasOneDayElapsed(sharedPreferences)) {
-                println("TRUEEEE")
+              //  println("TRUEEEE")
                 exchangeRatesViewModel.fetchExchangeRates("BAM")
                 exchangeRatesViewModel.exchangeRates.observe(this@MainActivity) { rates ->
                     rates?.let {
                         sharedPreferences.saveMap("exchange_rates", it)
                         storedExchangeRates = sharedPreferences.getMap("exchange_rates")
-                        println("STORED IN MAIN: $storedExchangeRates")
+                        //println("STORED IN MAIN: $storedExchangeRates")
                     }
                 }
             }
