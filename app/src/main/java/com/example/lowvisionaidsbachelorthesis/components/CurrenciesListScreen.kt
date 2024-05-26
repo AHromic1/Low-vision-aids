@@ -2,7 +2,7 @@
 
 package com.example.lowvisionaidsbachelorthesis.components
 
-
+import com.google.gson.Gson
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,53 +17,44 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Black
 import com.example.lowvisionaidsbachelorthesis.ui.theme.White
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextDecoration
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.example.lowvisionaidsbachelorthesis.ExchangeRatesViewModel
+import com.example.lowvisionaidsbachelorthesis.exchangeRatesAPI.ExchangeRatesViewModel
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Gray
 
 import androidx.compose.runtime.livedata.observeAsState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.lowvisionaidsbachelorthesis.MainActivity
 
 
 @Composable
-fun CurrenciesListScreen(navController: NavHostController, viewModel: ExchangeRatesViewModel) {
+fun CurrenciesListScreen(navController: NavHostController, exchangeRates: Map<String, Double>?) {
 
     val exchangeRatesState = remember { mutableStateOf<Map<String, Double>?>(null) }
 
-    LaunchedEffect(Unit) {
-        viewModel.fetchExchangeRates("BAM") // Base currency can be changed
+   /* LaunchedEffect(Unit) {
+        viewModel.fetchExchangeRates("BAM")
         exchangeRatesState.value = viewModel.exchangeRates.value
         println("FETCHED: ${exchangeRatesState.value}")
-    }
 
-    val exchangeRates by viewModel.exchangeRates.observeAsState()
+    }*/
+
+    //val exchangeRates by viewModel.exchangeRates.observeAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -186,7 +177,7 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                         }
                     }
 
-                    Spacer(Modifier.width(10.dp))
+                    //Spacer(Modifier.width(10.dp))
 
                     Row(
                         modifier = Modifier

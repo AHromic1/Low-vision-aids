@@ -1,4 +1,4 @@
-package com.example.lowvisionaidsbachelorthesis
+package com.example.lowvisionaidsbachelorthesis.exchangeRatesAPI
 
 import retrofit2.http.GET
 import retrofit2.http.Path
