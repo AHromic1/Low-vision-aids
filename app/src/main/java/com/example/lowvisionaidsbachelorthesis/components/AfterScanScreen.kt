@@ -20,7 +20,6 @@ import androidx.navigation.NavHostController
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Black
 import com.example.lowvisionaidsbachelorthesis.ui.theme.White
 
-@Preview
 @Composable
 fun AfterScanScreen(navController: NavHostController) {
     Surface(
@@ -41,8 +40,11 @@ fun AfterScanScreen(navController: NavHostController) {
                 horizontalAlignment = CenterHorizontally
             ) {
                 Box(
-                    modifier = Modifier.fillMaxHeight().fillMaxWidth()
-                        .clip(RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp)).background(White)
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp))
+                        .background(White)
                 ) {
                     Column(
                         modifier = Modifier.padding(16.dp),
@@ -51,8 +53,10 @@ fun AfterScanScreen(navController: NavHostController) {
                     ) {
 
                         Box(
-                            modifier = Modifier.fillMaxWidth()
-                                .clip(RoundedCornerShape(50.dp)).background(Black)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(50.dp))
+                                .background(Black)
                         ){
                             Column(
                                 modifier = Modifier.padding(13.dp),
@@ -107,6 +111,7 @@ fun AfterScanScreen(navController: NavHostController) {
                                 style = TextStyle(fontSize = 17.sp)
                             )
                         }
+                        BottomNavigation(navController = navController, screenActivity = "scanning")
                     }
                 }
 

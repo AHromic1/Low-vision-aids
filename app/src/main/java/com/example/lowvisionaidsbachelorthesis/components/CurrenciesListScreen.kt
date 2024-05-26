@@ -207,8 +207,22 @@ fun BottomNavigation(navController: NavHostController, screenActivity: String){
     var conversionEnabled: Boolean = true
     var scanningEnabled: Boolean = true
 
-    if(screenActivity == "scanning") scanningEnabled = false
-    if(screenActivity == "conversion") conversionEnabled = false
+    var conversionButtonColor = Black
+    var scanningButtonColor = Black
+    var conversionTextColor = White
+    var scanningTextColor = White
+
+
+    if(screenActivity == "scanning"){
+        scanningEnabled = false
+        scanningButtonColor = Gray
+        scanningTextColor = Black
+    }
+    if(screenActivity == "conversion"){
+        conversionEnabled = false
+        conversionButtonColor = Gray
+        conversionTextColor = Black
+    }
     //Spacer(Modifier.height(80.dp))
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -227,12 +241,12 @@ fun BottomNavigation(navController: NavHostController, screenActivity: String){
                     .width(180.dp)
                     .height(70.dp),
                 enabled = scanningEnabled,
-                colors = ButtonDefaults.buttonColors(Black),
+                colors = ButtonDefaults.buttonColors(scanningButtonColor),
                 shape = RoundedCornerShape(bottomStart = 20.dp, topStart = 20.dp, topEnd = 90.dp)
             ) {
                 Text(
                     text = "Skeniranje",
-                    color = White,
+                    color = scanningTextColor,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(end = 15.dp),
@@ -246,17 +260,17 @@ fun BottomNavigation(navController: NavHostController, screenActivity: String){
             Spacer(Modifier.width(2.dp))
 
             Button(
-                onClick = { },
+                onClick = { navController.navigate("CurrenciesListScreen")},
                 enabled = conversionEnabled,
                 modifier = Modifier
                     .width(180.dp)
                     .height(70.dp),
-                colors = ButtonDefaults.buttonColors(Gray),
+                colors = ButtonDefaults.buttonColors(conversionButtonColor),
                 shape = RoundedCornerShape(bottomStart = 90.dp, topEnd = 20.dp, bottomEnd = 20.dp)
             ) {
                 Text(
                     text = "Konverzija",
-                    color = Black,
+                    color = conversionTextColor,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 15.dp),

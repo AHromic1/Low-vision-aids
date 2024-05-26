@@ -57,8 +57,11 @@ fun InnerScreen(navController: NavHostController) {
             horizontalAlignment = CenterHorizontally
         ) {
             Box(
-                modifier = Modifier.fillMaxHeight().fillMaxWidth()
-                    .clip(RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp)).background(White)
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp))
+                    .background(White)
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp),
@@ -67,8 +70,10 @@ fun InnerScreen(navController: NavHostController) {
                 ) {
 
                     Box(
-                        modifier = Modifier.fillMaxWidth()
-                            .clip(RoundedCornerShape(50.dp)).background(Black)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(50.dp))
+                            .background(Black)
                     ) {
                         Column(
                             modifier = Modifier.padding(13.dp),
@@ -126,6 +131,7 @@ fun InnerScreen(navController: NavHostController) {
                             style = TextStyle(fontSize = 17.sp)
                         )
                     }
+                    BottomNavigation(navController = navController, screenActivity = "scanning")
                 }
             }
         }
