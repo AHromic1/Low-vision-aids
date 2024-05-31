@@ -16,8 +16,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
-//import androidx.room.Room
+import androidx.room.Room
 import com.example.lowvisionaidsbachelorthesis.components.*
+import com.example.lowvisionaidsbachelorthesis.database.ScannedMoney
 import com.example.lowvisionaidsbachelorthesis.exchangeRatesAPI.ExchangeRatesViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -26,14 +27,14 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-//import com.example.lowvisionaidsbachelorthesis.database.ScannedMoneyRepository.Companion.writeToDB
+import com.example.lowvisionaidsbachelorthesis.database.ScannedMoneyRepository.Companion.writeToDB
 
 
 class MainActivity : ComponentActivity() {
     private val exchangeRatesViewModel by viewModels<ExchangeRatesViewModel>()
     lateinit var textToSpeech: TextToSpeech
 
-/*private fun addToDatabase(value: ScannedMoney) {
+private fun addToDatabase(value: ScannedMoney) {
     lifecycleScope.launch {
         try {
             val result = writeToDB(applicationContext, value)
@@ -43,7 +44,7 @@ class MainActivity : ComponentActivity() {
             error.printStackTrace()
         }
     }
-}*/
+}
 
     private var storedExchangeRates: Map<String, Double>? = null
     private var dateTime: LocalDateTime? = null
@@ -55,13 +56,10 @@ class MainActivity : ComponentActivity() {
         //textToSpeech = TextToSpeech(this, this)
 
         dateTime = LocalDateTime.now()
-        println("DATE AND TIME IS: $dateTime")
 
         lifecycleScope.launch {
             val sharedPreferences: CustomSharedPreferences = CustomSharedPreferences(applicationContext)
-            //println("is it true ${hasOneDayElapsed(sharedPreferences)}")
             if(hasOneDayElapsed(sharedPreferences)) {
-              //  println("TRUEEEE")
                 exchangeRatesViewModel.fetchExchangeRates("BAM")
                 exchangeRatesViewModel.exchangeRates.observe(this@MainActivity) { rates ->
                     rates?.let {
@@ -76,10 +74,10 @@ class MainActivity : ComponentActivity() {
         storedExchangeRates = customSharedPreferences.getMap("exchange_rates")
 
         ////database test
-       /* lifecycleScope.launch {
+        lifecycleScope.launch {
             val scannedMoney = ScannedMoney(1, 100.0)
             addToDatabase(scannedMoney)
-        }*/
+        }
 
 
 
@@ -158,7 +156,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-   /* private fun addScannedMoney() {
+    /*private fun addScannedMoney() {
         val scannedMoney = ScannedMoney(0,  100.0)
         scannedMoneyViewModel.insert(scannedMoney)
     }*/

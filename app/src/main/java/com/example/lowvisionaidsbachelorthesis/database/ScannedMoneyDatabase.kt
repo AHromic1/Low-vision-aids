@@ -1,5 +1,5 @@
 package com.example.lowvisionaidsbachelorthesis.database
-/*
+
 import ScannedMoneyDao
 import android.content.Context
 import androidx.room.Database
@@ -31,4 +31,3 @@ abstract class ScannedMoneyDatabase : RoomDatabase() {
     }
 
 }
-*/

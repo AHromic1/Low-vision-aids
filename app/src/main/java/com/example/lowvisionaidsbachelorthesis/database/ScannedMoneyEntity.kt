@@ -1,5 +1,5 @@
 package com.example.lowvisionaidsbachelorthesis.database
-/*
+
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -15,4 +15,4 @@ data class ScannedMoney(
             this(0, totalValue)
 }
 
-*/
+

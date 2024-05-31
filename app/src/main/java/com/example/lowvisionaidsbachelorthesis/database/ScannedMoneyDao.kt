@@ -1,4 +1,4 @@
-/*
+
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -18,4 +18,4 @@ interface ScannedMoneyDao {
 
     @Update
     suspend fun update(newScan: ScannedMoney)
-}*/
+}

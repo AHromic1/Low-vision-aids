@@ -1,5 +1,5 @@
 package com.example.lowvisionaidsbachelorthesis.database
-/*
+
 import ScannedMoneyDao
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
@@ -29,4 +29,4 @@ class ScannedMoneyRepository() {
     }
 }
 
- */
+
