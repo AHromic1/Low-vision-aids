@@ -5,10 +5,14 @@
     <string name="total_scanned_value">Ukupna skenirana vrijednost iznosi</string>
     <string name="continue_scanning">Nastavite skeniranje</string>
     <string name="new_scan">Novo skeniranje</string>
-    <string name="scanning_bttn">Skeniranje - odaberite za otvaranje ekrana za skeniranje</string>
-    <string name="conversion_bttn">Konverzija - odaberite za otvaranje ekrana za konverziju novca</string>
+    <string name="scanning_bttn">otvaranje ekrana za skeniranje</string>
+    <string name="conversion_bttn">otvaranje ekrana za konverziju novca</string>
     <string name="choose_currency">Odaberite kod valute u koju želite konvertovati skenirani iznos</string>
     <string name="search_for_currency">Pretražite kod valute u koju želite konvertovati skenirani iznos</string>
     <string name="converted_value">Konvertovana vrijednost iznosi </string>
     <string name="new_conversion">Nova konverzija</string>
+    <string name="conversion">Konverzija</string>
+    <string name="scanning">Skeniranje</string>
+    <string name="search">Pretraga</string>
+    <string name="choose_currency_text">Odaberite valutu</string>
 </resources>

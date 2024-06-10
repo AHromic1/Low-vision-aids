@@ -69,7 +69,7 @@ fun CurrenciesListScreen(navController: NavHostController, exchangeRates: Map<St
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Odaberite željenu valutu",
+                text = stringResource(id = R.string.choose_currency),
                 color = White,
                 style = TextStyle(fontSize = 30.sp, fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(top = 40.dp)
@@ -84,10 +84,7 @@ fun CurrenciesListScreen(navController: NavHostController, exchangeRates: Map<St
 fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<String, Double>?) {
     var searchText by remember { mutableStateOf(TextFieldValue()) }
 
-    // Create a list of currency codes from the observed exchange rates
     val currencyCodes = exchangeRates?.keys?.toList() ?: emptyList()
-
-    // Filter the currency codes based on the search text
     val filteredCurrencies = remember(searchText.text) {
         currencyCodes.filter {
             it.contains(searchText.text, ignoreCase = true)
@@ -145,7 +142,7 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                                             androidx.compose.material.TextField(
                                                 value = searchText,
                                                 onValueChange = { searchText = it },
-                                                placeholder = { Text("Search") },
+                                                placeholder = { Text(stringResource(id = R.string.search)) },
                                                 modifier = Modifier.fillMaxWidth(),
                                                 leadingIcon = {
                                                     androidx.compose.material.Icon(
@@ -231,7 +228,8 @@ fun BottomNavigation(navController: NavHostController, screenActivity: String){
     }
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .clickable(
                 onClickLabel = stringResource(R.string.conversion_bttn),
                 onClick = {}
@@ -263,7 +261,7 @@ fun BottomNavigation(navController: NavHostController, screenActivity: String){
                 shape = RoundedCornerShape(bottomStart = 20.dp, topStart = 20.dp, topEnd = 90.dp)
             ) {
                 Text(
-                    text = "Skeniranje",
+                    text = stringResource(id = R.string.scanning),
                     color = scanningTextColor,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -291,7 +289,7 @@ fun BottomNavigation(navController: NavHostController, screenActivity: String){
                 shape = RoundedCornerShape(bottomStart = 90.dp, topEnd = 20.dp, bottomEnd = 20.dp)
             ) {
                 Text(
-                    text = "Konverzija",
+                    text = stringResource(id = R.string.conversion),
                     color = conversionTextColor,
                     modifier = Modifier
                         .fillMaxWidth()

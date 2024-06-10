@@ -1,4 +1,4 @@
-package com.example.lowvisionaidsbachelorthesis.database
+package com.example.lowvisionaidsbachelorthesis.database_dao
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

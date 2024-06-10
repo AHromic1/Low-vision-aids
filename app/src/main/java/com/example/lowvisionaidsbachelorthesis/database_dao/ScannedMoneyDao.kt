@@ -1,10 +1,8 @@
-
+package com.example.lowvisionaidsbachelorthesis.database_dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.lowvisionaidsbachelorthesis.database.ScannedMoney
-import kotlinx.coroutines.flow.Flow
 
 
 @Dao

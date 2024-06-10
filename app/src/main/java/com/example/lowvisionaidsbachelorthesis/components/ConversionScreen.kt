@@ -77,7 +77,7 @@ fun ConversionScreen(navController: NavHostController, value: Double = 0.0) {
                                 horizontalAlignment = CenterHorizontally
                             ) {
                                 Text(
-                                    text = "Konvertovana vrijednost iznosi:",
+                                    text = stringResource(id = R.string.converted_value),
                                     color = White,
                                     style = TextStyle(fontSize = 20.sp),
                                     textAlign = TextAlign.Center,
@@ -110,7 +110,7 @@ fun ConversionScreen(navController: NavHostController, value: Double = 0.0) {
                             shape = RoundedCornerShape(8.dp)
                         ) {
                             Text(
-                                text = "Nova konverzija",
+                                text = stringResource(id = R.string.new_conversion),
                                 color = White,
                                 modifier = Modifier
                                     .padding(10.dp)

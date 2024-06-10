@@ -37,7 +37,7 @@ fun WelcomeScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Dobro došli!",
+                text = stringResource(id = R.string.welcome),
                 color = White,
                 style = TextStyle(fontSize = 50.sp, fontWeight = FontWeight.Bold),
                 modifier = Modifier
@@ -90,15 +90,16 @@ fun InnerScreen(navController: NavHostController) {
                             horizontalAlignment = CenterHorizontally
                         ) {
                             Text(
-                                text = "Ukupna skenirana vrijednost:",
+                                text = stringResource(id = R.string.total_scanned_value),
                                 color = White,
                                 style = TextStyle(fontSize = 20.sp),
                                 textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(start = 35.dp, end = 35.dp, top = 15.dp)
+                                modifier = Modifier
+                                    .padding(start = 35.dp, end = 35.dp, top = 15.dp)
                                     .clickable(
-                                    onClickLabel = stringResource(R.string.total_scanned_value),
-                                    onClick = { }
-                                )
+                                        onClickLabel = stringResource(R.string.total_scanned_value),
+                                        onClick = { }
+                                    )
                             )
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -119,16 +120,17 @@ fun InnerScreen(navController: NavHostController) {
                     Spacer(modifier = Modifier.height(35.dp))
                     Button(
                         onClick = { /* Nastavi skeniranje */ },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .clickable(
-                            onClickLabel = stringResource(R.string.continue_scanning),
-                            onClick = {}
-                        ),
+                                onClickLabel = stringResource(R.string.continue_scanning),
+                                onClick = {}
+                            ),
                         colors = ButtonDefaults.buttonColors(Black),
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         Text(
-                            text = "Nastavi skeniranje",
+                            text = stringResource(R.string.continue_scanning),
                             color = White,
                             modifier = Modifier.padding(10.dp),
                             style = TextStyle(fontSize = 17.sp)
@@ -137,7 +139,8 @@ fun InnerScreen(navController: NavHostController) {
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
                         onClick = { /* Novo skeniranje */ },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .clickable(
                                 onClickLabel = stringResource(R.string.new_scan),
                                 onClick = {}
@@ -146,7 +149,7 @@ fun InnerScreen(navController: NavHostController) {
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         Text(
-                            text = "Novo skeniranje",
+                            text = stringResource(R.string.new_scan),
                             color = White,
                             modifier = Modifier.padding(10.dp),
                             style = TextStyle(fontSize = 17.sp)

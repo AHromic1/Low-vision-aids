@@ -1,6 +1,5 @@
-package com.example.lowvisionaidsbachelorthesis.database
+package com.example.lowvisionaidsbachelorthesis.database_dao
 
-import ScannedMoneyDao
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room

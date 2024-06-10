@@ -1,9 +1,9 @@
-package com.example.lowvisionaidsbachelorthesis.database
+package com.example.lowvisionaidsbachelorthesis.database_dao
 
-import ScannedMoneyDao
 import android.content.Context
+import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoney
+import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoneyDatabase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class ScannedMoneyRepository() {

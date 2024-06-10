@@ -9,16 +9,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
-import androidx.room.Room
 import com.example.lowvisionaidsbachelorthesis.components.*
-import com.example.lowvisionaidsbachelorthesis.database.ScannedMoney
+import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoney
 import com.example.lowvisionaidsbachelorthesis.exchangeRatesAPI.ExchangeRatesViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -27,7 +25,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-import com.example.lowvisionaidsbachelorthesis.database.ScannedMoneyRepository.Companion.writeToDB
+import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoneyRepository.Companion.writeToDB
 
 
 class MainActivity : ComponentActivity() {
@@ -58,8 +56,13 @@ private fun addToDatabase(value: ScannedMoney) {
         dateTime = LocalDateTime.now()
 
         lifecycleScope.launch {
-            val sharedPreferences: CustomSharedPreferences = CustomSharedPreferences(applicationContext)
-            if(hasOneDayElapsed(sharedPreferences)) {
+            println("Launcheddd")
+            val sharedPreferences = CustomSharedPreferences(applicationContext)
+            //println("Has one day elapsed ${hasOneDayElapsed(sharedPreferences)}")
+            val hasElapsed = hasOneDayElapsed(sharedPreferences)
+            println("Has elapsed $hasElapsed")
+            if(hasElapsed) {
+                println("elapseddddd")
                 exchangeRatesViewModel.fetchExchangeRates("BAM")
                 exchangeRatesViewModel.exchangeRates.observe(this@MainActivity) { rates ->
                     rates?.let {
@@ -74,10 +77,10 @@ private fun addToDatabase(value: ScannedMoney) {
         storedExchangeRates = customSharedPreferences.getMap("exchange_rates")
 
         ////database test
-        lifecycleScope.launch {
+        /*lifecycleScope.launch {
             val scannedMoney = ScannedMoney(1, 100.0)
             addToDatabase(scannedMoney)
-        }
+        }*/
 
 
 
@@ -85,12 +88,12 @@ private fun addToDatabase(value: ScannedMoney) {
 
         /////
 
-        exchangeRatesViewModel.fetchExchangeRates("BAM")
+        //exchangeRatesViewModel.fetchExchangeRates("BAM")
 
         setContent {
             val navController = rememberNavController()
 
-            NavHost(navController = navController, startDestination = "CurrenciesListScreen") {
+            NavHost(navController = navController, startDestination = "WelcomeScreen") {
                 composable("Test") {
                     //Test(navController = navController)
                 }
@@ -146,6 +149,7 @@ private fun addToDatabase(value: ScannedMoney) {
     private fun hasOneDayElapsed(customSharedPreferences: CustomSharedPreferences): Boolean {
         val formatter = DateTimeFormatter.ISO_DATE
         val lastRunDate = customSharedPreferences.getDateTime("last_run_date")?.let { LocalDate.parse(it, formatter) }
+        println("LAST RUN DATE, $lastRunDate")
         val today = LocalDate.now()
 
         return if (lastRunDate == null || today.isAfter(lastRunDate)) {
