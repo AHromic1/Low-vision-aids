@@ -4,7 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.speech.tts.TextToSpeech
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -25,12 +28,16 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+import androidx.appcompat.app.AppCompatActivity
+import java.util.*
+
 import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoneyRepository.Companion.writeToDB
 
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private val exchangeRatesViewModel by viewModels<ExchangeRatesViewModel>()
     lateinit var textToSpeech: TextToSpeech
+    private lateinit var tts: TTS
 
 private fun addToDatabase(value: ScannedMoney) {
     lifecycleScope.launch {
@@ -51,7 +58,9 @@ private fun addToDatabase(value: ScannedMoney) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //textToSpeech = TextToSpeech(this, this)
+        tts = TTS(this)
+
+        textToSpeech = TextToSpeech(this, this)
 
         dateTime = LocalDateTime.now()
 
@@ -93,25 +102,25 @@ private fun addToDatabase(value: ScannedMoney) {
         setContent {
             val navController = rememberNavController()
 
-            NavHost(navController = navController, startDestination = "WelcomeScreen") {
+            NavHost(navController = navController, startDestination = "CurrenciesListScreen") {
                 composable("Test") {
                     //Test(navController = navController)
                 }
                 composable("WelcomeScreen") {
-                    WelcomeScreen(navController = navController)
+                    WelcomeScreen(navController = navController, textToSpeech = tts)
                 }
                 composable("AfterScanScreen") {
                     AfterScanScreen(navController = navController)
                 }
                 composable("CurrenciesListScreen") {
-                    CurrenciesListScreen(navController = navController, exchangeRates = storedExchangeRates)
+                    CurrenciesListScreen(navController = navController, exchangeRates = storedExchangeRates, textToSpeech = tts)
                 }
                 composable(
                     "ConversionScreen/{value}",
                     arguments = listOf(navArgument("value") { type = NavType.FloatType })
                 ) { backStackEntry ->
                     val value = backStackEntry.arguments?.getFloat("value") ?: 0.0f
-                    ConversionScreen(navController = navController, value.toDouble())
+                    ConversionScreen(navController = navController, value.toDouble(), textToSpeech = tts)
                 }
             }
         }
@@ -158,6 +167,34 @@ private fun addToDatabase(value: ScannedMoney) {
         } else {
             false
         }
+    }
+    /////////////////////TTS
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            val defaultLocale = Locale.getDefault()
+            val result = textToSpeech.setLanguage(defaultLocale)
+
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Toast.makeText(this, "Language not supported.", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(this, "Initialization failed.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+     fun speak(text: String) {
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed({
+            textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+        }, 5000)
+    }
+
+    override fun onDestroy() {
+        if (textToSpeech.isSpeaking) {
+            textToSpeech.stop()
+        }
+        textToSpeech.shutdown()
+        super.onDestroy()
     }
 
     /*private fun addScannedMoney() {

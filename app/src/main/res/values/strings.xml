@@ -6,7 +6,7 @@
     <string name="new_scan">New scan</string>
     <string name="scanning_bttn">open a scanning screen</string>
     <string name="conversion_bttn">open a conversion screen</string>
-    <string name="choose_currency">Choose the currency code to which you wish to convert the scanned value</string>
+    <string name="choose_currency">Choose or search for the currency code to which you wish to convert the scanned value from the list below</string>
     <string name="search_for_currency">Search for the currency code to which you wish to convert the scanned value</string>
     <string name="converted_value">Converted value is </string>
     <string name="new_conversion">New conversion</string>

@@ -42,10 +42,12 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
 import com.example.lowvisionaidsbachelorthesis.MainActivity
 import com.example.lowvisionaidsbachelorthesis.R
+import com.example.lowvisionaidsbachelorthesis.TTS
 
 
 @Composable
-fun CurrenciesListScreen(navController: NavHostController, exchangeRates: Map<String, Double>?) {
+fun CurrenciesListScreen(navController: NavHostController, exchangeRates: Map<String, Double>?, textToSpeech: TTS) {
+    textToSpeech.speak(stringResource(id = R.string.choose_currency), 5000)
 
     //val exchangeRatesState = remember { mutableStateOf<Map<String, Double>?>(null) }
 
@@ -69,10 +71,13 @@ fun CurrenciesListScreen(navController: NavHostController, exchangeRates: Map<St
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(id = R.string.choose_currency),
+                text = stringResource(id = R.string.choose_currency_text),
                 color = White,
                 style = TextStyle(fontSize = 30.sp, fontWeight = FontWeight.Bold),
-                modifier = Modifier.padding(top = 40.dp)
+                modifier = Modifier.padding(top = 40.dp).clickable(
+                    onClickLabel = stringResource(R.string.choose_currency),
+                    onClick = { }
+                )
             )
             InnerScreenCurrency(navController, exchangeRates)
         }
@@ -125,7 +130,6 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                             horizontalAlignment = CenterHorizontally
                         ) {
                             Link()
-
                             Scaffold(
                                 backgroundColor = White,
                                 topBar = {
@@ -157,10 +161,10 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                                 }
                             ) {
                                 Box(
-                                    modifier = Modifier.fillMaxSize()
+                                    modifier = Modifier.height(330.dp)
                                 ) {
                                     LazyColumn(
-                                        modifier = Modifier.height(400.dp)
+                                        modifier = Modifier.height(330.dp)
                                     ) {
                                         items(filteredCurrencies.size) { index ->
                                             SearchResultItem(
@@ -175,10 +179,12 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
 
                                         //println("FILTERED CURRENCIES $filteredCurrencies")
                                     }
-                                    BottomNavigation(navController = navController, "conversion")
+
                                 }
                             }
+
                         }
+                        BottomNavigation(navController = navController, "conversion")
                     }
                 }
             }
@@ -254,7 +260,7 @@ fun BottomNavigation(navController: NavHostController, screenActivity: String){
                     .height(70.dp)
                     .clickable(
                         onClickLabel = stringResource(R.string.scanning_bttn),
-                        onClick = {}
+                        onClick = {navController.navigate("WelcomeScreen")}
                     ),
                 enabled = scanningEnabled,
                 colors = ButtonDefaults.buttonColors(scanningButtonColor),
@@ -283,7 +289,7 @@ fun BottomNavigation(navController: NavHostController, screenActivity: String){
                     .height(70.dp)
                     .clickable(
                         onClickLabel = stringResource(R.string.conversion_bttn),
-                        onClick = {}
+                        onClick = {navController.navigate("CurrenciesListScreen")}
                     ),
                 colors = ButtonDefaults.buttonColors(conversionButtonColor),
                 shape = RoundedCornerShape(bottomStart = 90.dp, topEnd = 20.dp, bottomEnd = 20.dp)

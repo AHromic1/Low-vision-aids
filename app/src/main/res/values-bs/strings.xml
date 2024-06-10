@@ -7,7 +7,7 @@
     <string name="new_scan">Novo skeniranje</string>
     <string name="scanning_bttn">otvaranje ekrana za skeniranje</string>
     <string name="conversion_bttn">otvaranje ekrana za konverziju novca</string>
-    <string name="choose_currency">Odaberite kod valute u koju želite konvertovati skenirani iznos</string>
+    <string name="choose_currency">Odaberite ili pretražite kod valute u koju želite konvertovati skenirani iznos sa donje liste</string>
     <string name="search_for_currency">Pretražite kod valute u koju želite konvertovati skenirani iznos</string>
     <string name="converted_value">Konvertovana vrijednost iznosi </string>
     <string name="new_conversion">Nova konverzija</string>

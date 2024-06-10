@@ -20,17 +20,20 @@ import com.example.lowvisionaidsbachelorthesis.ui.theme.Black
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Gray
 import com.example.lowvisionaidsbachelorthesis.ui.theme.White
 import android.speech.tts.TextToSpeech
+import androidx.compose.ui.semantics.semantics
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.lowvisionaidsbachelorthesis.R
+import com.example.lowvisionaidsbachelorthesis.TTS
 import java.math.RoundingMode
 import java.math.BigDecimal
 
 
 @Composable
-fun ConversionScreen(navController: NavHostController, value: Double = 0.0) {
+fun ConversionScreen(navController: NavHostController, value: Double = 0.0, textToSpeech: TTS) {
+    textToSpeech.speak(stringResource(id = R.string.converted_value), 5000)
     val BD = BigDecimal(value)
     val roundedValue = BD.setScale(2, RoundingMode.CEILING)
     val KMString = stringResource(R.string.KM)
@@ -72,7 +75,7 @@ fun ConversionScreen(navController: NavHostController, value: Double = 0.0) {
                                 .background(Black)
                         ){
                             Column(
-                                modifier = Modifier.padding(13.dp),
+                                modifier = Modifier.padding(13.dp),//.semantics(mergeDescendants = true){},
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = CenterHorizontally
                             ) {
