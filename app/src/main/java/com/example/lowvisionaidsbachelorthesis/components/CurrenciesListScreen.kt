@@ -217,6 +217,7 @@ fun SearchResultItem(text: String, isLastItem: Boolean, onClick: () -> Unit) {
 fun BottomNavigation(navController: NavHostController, screenActivity: String){
     var conversionEnabled: Boolean = true
     var scanningEnabled: Boolean = true
+    var bothEnabled: Boolean = true
 
     var conversionButtonColor = Black
     var scanningButtonColor = Black
@@ -226,11 +227,13 @@ fun BottomNavigation(navController: NavHostController, screenActivity: String){
 
     if(screenActivity == "scanning"){
         scanningEnabled = false
+        bothEnabled = false
         scanningButtonColor = Gray
         scanningTextColor = Black
     }
-    if(screenActivity == "conversion"){
+    else if(screenActivity == "conversion"){
         conversionEnabled = false
+        bothEnabled = false
         conversionButtonColor = Gray
         conversionTextColor = Black
     }

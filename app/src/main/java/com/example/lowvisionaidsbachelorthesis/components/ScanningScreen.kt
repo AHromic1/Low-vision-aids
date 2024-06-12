@@ -67,6 +67,6 @@ fun ScanningScreen(navController: NavHostController, controller: LifecycleCamera
                 )
             }
         }
-        BottomNavigation(navController = navController, "conversion")
+        BottomNavigation(navController = navController, "scanningScreen")
     }
 }

@@ -117,7 +117,7 @@ fun InnerScreen(navController: NavHostController) {
                     }
                     Spacer(modifier = Modifier.height(35.dp))
                     Button(
-                        onClick = { /* Nastavi skeniranje */ },
+                        onClick = { navController.navigate("ScanningScreen") },
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable(
@@ -136,7 +136,7 @@ fun InnerScreen(navController: NavHostController) {
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
-                        onClick = { /* Novo skeniranje */ },
+                        onClick = { navController.navigate("ScanningScreen") },
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable(
