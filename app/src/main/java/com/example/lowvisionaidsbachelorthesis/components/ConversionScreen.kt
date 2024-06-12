@@ -17,16 +17,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Black
-import com.example.lowvisionaidsbachelorthesis.ui.theme.Gray
 import com.example.lowvisionaidsbachelorthesis.ui.theme.White
-import android.speech.tts.TextToSpeech
-import androidx.compose.ui.semantics.semantics
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.lowvisionaidsbachelorthesis.R
-import com.example.lowvisionaidsbachelorthesis.TTS
+import com.example.lowvisionaidsbachelorthesis.textToSpeech.TTS
 import java.math.RoundingMode
 import java.math.BigDecimal
 

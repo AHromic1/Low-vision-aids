@@ -2,7 +2,6 @@
 
 package com.example.lowvisionaidsbachelorthesis.components
 
-import com.google.gson.Gson
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,7 +20,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.*
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Black
 import com.example.lowvisionaidsbachelorthesis.ui.theme.White
 
@@ -35,14 +33,11 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.lowvisionaidsbachelorthesis.exchangeRatesAPI.ExchangeRatesViewModel
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Gray
 
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
-import com.example.lowvisionaidsbachelorthesis.MainActivity
 import com.example.lowvisionaidsbachelorthesis.R
-import com.example.lowvisionaidsbachelorthesis.TTS
+import com.example.lowvisionaidsbachelorthesis.textToSpeech.TTS
 
 
 @Composable
@@ -130,7 +125,8 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                             horizontalAlignment = CenterHorizontally
                         ) {
                             Link()
-                            Scaffold(
+                                Scaffold(
+                                    modifier = Modifier.height(70.dp),
                                 backgroundColor = White,
                                 topBar = {
                                     TopAppBar(
@@ -159,7 +155,7 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                                         }
                                     )
                                 }
-                            ) {
+                            ) { }
                                 Box(
                                     modifier = Modifier.height(330.dp)
                                 ) {
@@ -172,19 +168,25 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                                                 isLastItem = index == filteredCurrencies.lastIndex,
                                                 onClick = {
                                                     //println("Clicked on currency: ${filteredCurrencies[index]}")
-                                                    navController.navigate("ConversionScreen/${exchangeRates?.get(filteredCurrencies[index])}")
+                                                    navController.navigate(
+                                                        "ConversionScreen/${
+                                                            exchangeRates?.get(
+                                                                filteredCurrencies[index]
+                                                            )
+                                                        }"
+                                                    )
                                                 }
                                             )
                                         }
-
                                         //println("FILTERED CURRENCIES $filteredCurrencies")
                                     }
-
                                 }
-                            }
+                           // }
 
+                        //
+                            BottomNavigation(navController = navController, "conversion")
                         }
-                        BottomNavigation(navController = navController, "conversion")
+
                     }
                 }
             }

@@ -1,14 +1,15 @@
 package com.example.lowvisionaidsbachelorthesis
 
+import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.speech.tts.TextToSpeech
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -29,12 +30,25 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.view.CameraController
+import androidx.camera.view.LifecycleCameraController
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import java.util.*
 
 import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoneyRepository.Companion.writeToDB
+import com.example.lowvisionaidsbachelorthesis.textToSpeech.TTS
+import com.example.lowvisionaidsbachelorthesis.tflite.Classification
+import com.example.lowvisionaidsbachelorthesis.tflite.LandmarkImageAnalyzer
+import com.example.lowvisionaidsbachelorthesis.tflite.TfLiteLandmarkClassifier
 
 
 class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
+
     private val exchangeRatesViewModel by viewModels<ExchangeRatesViewModel>()
     lateinit var textToSpeech: TextToSpeech
     private lateinit var tts: TTS
@@ -57,6 +71,13 @@ private fun addToDatabase(value: ScannedMoney) {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //////////////////tflite//////////////////////
+        if(!hasCameraPermission()) {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.CAMERA), 0
+            )
+        }
+        /////////////////////////////////////////////
 
         tts = TTS(this)
 
@@ -100,11 +121,36 @@ private fun addToDatabase(value: ScannedMoney) {
         //exchangeRatesViewModel.fetchExchangeRates("BAM")
 
         setContent {
+            ////////////////////tflite//////////////////////////////////
+            var classifications by remember {
+                mutableStateOf(emptyList<Classification>())
+            }
+            val analyzer = remember {
+                LandmarkImageAnalyzer(
+                    classifier = TfLiteLandmarkClassifier(
+                        context = applicationContext
+                    ),
+                    onResults = {
+                        classifications = it
+                        println("CLASSIFICATIONS $classifications")
+                    }
+                )
+            }
+            val controller = remember {
+                LifecycleCameraController(applicationContext).apply {
+                    setEnabledUseCases(CameraController.IMAGE_ANALYSIS)
+                    setImageAnalysisAnalyzer(
+                        ContextCompat.getMainExecutor(applicationContext),
+                        analyzer
+                    )
+                }
+            }
+            ////////////////////////////////////////////////////////
             val navController = rememberNavController()
 
-            NavHost(navController = navController, startDestination = "CurrenciesListScreen") {
-                composable("Test") {
-                    //Test(navController = navController)
+            NavHost(navController = navController, startDestination = "ScanningScreen") {
+                composable("ScanningScreen") {
+                    ScanningScreen(navController = navController, controller = controller, classifications = classifications)
                 }
                 composable("WelcomeScreen") {
                     WelcomeScreen(navController = navController, textToSpeech = tts)
@@ -201,4 +247,8 @@ private fun addToDatabase(value: ScannedMoney) {
         val scannedMoney = ScannedMoney(0,  100.0)
         scannedMoneyViewModel.insert(scannedMoney)
     }*/
+
+    private fun hasCameraPermission() = ContextCompat.checkSelfPermission(
+        this, Manifest.permission.CAMERA
+    ) == PackageManager.PERMISSION_GRANTED
 }
