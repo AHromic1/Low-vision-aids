@@ -15,4 +15,5 @@
     <string name="scanning">Scanning</string>
     <string name="search">Search</string>
     <string name="choose_currency_text">Choose currency</string>
+    <string name="phenings" translatable="false">fenings</string>
 </resources>

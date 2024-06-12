@@ -148,9 +148,9 @@ private fun addToDatabase(value: ScannedMoney) {
             ////////////////////////////////////////////////////////
             val navController = rememberNavController()
 
-            NavHost(navController = navController, startDestination = "ScanningScreen") {
+            NavHost(navController = navController, startDestination = "WelcomeScreen") {
                 composable("ScanningScreen") {
-                    ScanningScreen(navController = navController, controller = controller, classifications = classifications)
+                    ScanningScreen(navController = navController, controller = controller, classifications = classifications, textToSpeech = tts)
                 }
                 composable("WelcomeScreen") {
                     WelcomeScreen(navController = navController, textToSpeech = tts)

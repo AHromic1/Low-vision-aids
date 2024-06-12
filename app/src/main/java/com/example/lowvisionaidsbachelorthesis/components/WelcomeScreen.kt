@@ -13,6 +13,7 @@ import androidx.compose.material.Text
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,7 +28,10 @@ import com.example.lowvisionaidsbachelorthesis.ui.theme.White
 @Composable
 fun WelcomeScreen(navController: NavHostController, textToSpeech: TTS) {
 
-    textToSpeech.speak(stringResource(id = R.string.total_scanned_value), 5000)
+    textToSpeech.speak(stringResource(id = R.string.total_scanned_value), 0)
+    //dodati jos 2 tts - vrijednost + KM
+
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Black
@@ -54,7 +58,7 @@ fun WelcomeScreen(navController: NavHostController, textToSpeech: TTS) {
 }
 @Composable
 fun InnerScreen(navController: NavHostController) {
-    val KMString = stringResource(R.string.KM)
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Black
@@ -102,8 +106,11 @@ fun InnerScreen(navController: NavHostController) {
                                         onClick = { }
                                     )
                             )
+                            Row(
+                                Modifier.semantics(mergeDescendants = true){}
+                            ) {
                                 Text(
-                                    text = "100 $KMString",
+                                    text = "100",
                                     color = White,
                                     style = TextStyle(
                                         fontSize = 50.sp,
@@ -112,6 +119,21 @@ fun InnerScreen(navController: NavHostController) {
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier.padding(8.dp)
                                 )
+                                Text(
+                                    text = "KM",
+                                    color = White,
+                                    style = TextStyle(
+                                        fontSize = 50.sp,
+                                        fontWeight = FontWeight.Bold
+                                    ),
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.padding(8.dp)
+                                        .clickable (
+                                            onClickLabel = stringResource(R.string.KM),
+                                            onClick = { }
+                                        )
+                                )
+                            }
                            // }
                         }
                     }

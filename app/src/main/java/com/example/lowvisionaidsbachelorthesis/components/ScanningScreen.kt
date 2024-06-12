@@ -32,13 +32,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.lowvisionaidsbachelorthesis.R
+import com.example.lowvisionaidsbachelorthesis.textToSpeech.TTS
 import com.example.lowvisionaidsbachelorthesis.tflite.CameraPreview
 import com.example.lowvisionaidsbachelorthesis.tflite.Classification
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Black
 import com.example.lowvisionaidsbachelorthesis.ui.theme.White
 
 @Composable
-fun ScanningScreen(navController: NavHostController, controller: LifecycleCameraController, classifications: List<Classification>) {
+fun ScanningScreen(navController: NavHostController, controller: LifecycleCameraController, classifications: List<Classification>, textToSpeech: TTS) {
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -46,8 +47,10 @@ fun ScanningScreen(navController: NavHostController, controller: LifecycleCamera
         val screenHeight = maxHeight
         val desiredHeight = screenHeight * 0.8f
 
-        CameraPreview(controller, Modifier.fillMaxWidth()
-            .height(desiredHeight))
+        CameraPreview(controller,
+            Modifier
+                .fillMaxWidth()
+                .height(desiredHeight))
 
         Column(
             modifier = Modifier
@@ -55,6 +58,10 @@ fun ScanningScreen(navController: NavHostController, controller: LifecycleCamera
                 .align(Alignment.TopCenter)
         ) {
             classifications.forEach {
+                val number = extractNumber(it.name)
+                val unit = extractUnit(it.name)
+                textToSpeech.speak(number, 0)
+                textToSpeech.speak(unit, 500)
                 Text(
                     text = it.name,
                     modifier = Modifier
@@ -69,4 +76,27 @@ fun ScanningScreen(navController: NavHostController, controller: LifecycleCamera
         }
         BottomNavigation(navController = navController, "scanningScreen")
     }
+}
+
+fun extractNumber(input: String): String {
+    val regex = "\\d+".toRegex()
+    val matchResult = regex.find(input)
+    if (matchResult != null) {
+        return matchResult.value
+    }
+    return ""
+}
+
+@Composable   //zbog stringResource
+fun extractUnit(input: String): String{
+    val regex = "[a-zA-Z]+".toRegex()
+    val matchResult = regex.find(input)
+    var unit: String = ""
+    if (matchResult != null) {
+        unit = matchResult.value
+    }
+
+    if(unit == "f") return stringResource(id = R.string.phenings)
+    else if(unit == "KM") return stringResource(id = R.string.KM)
+    return ""
 }
