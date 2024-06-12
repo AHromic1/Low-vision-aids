@@ -1,5 +1,6 @@
 package com.example.lowvisionaidsbachelorthesis.database_dao
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
@@ -16,4 +17,7 @@ interface ScannedMoneyDao {
 
     @Update
     suspend fun update(newScan: ScannedMoney)
+
+    @Query("DELETE FROM scanned_money_table WHERE id = :id")
+    suspend fun deleteById(id: Long)
 }

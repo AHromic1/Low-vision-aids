@@ -1,5 +1,6 @@
 package com.example.lowvisionaidsbachelorthesis
 
+import WelcomeScreen
 import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
@@ -38,6 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoneyRepository.Companion.fetchFromDB
 import java.util.*
 
 import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoneyRepository.Companion.writeToDB
@@ -50,9 +52,11 @@ import com.example.lowvisionaidsbachelorthesis.tflite.TfLiteLandmarkClassifier
 class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private val exchangeRatesViewModel by viewModels<ExchangeRatesViewModel>()
-    lateinit var textToSpeech: TextToSpeech
+    private lateinit var textToSpeech: TextToSpeech
     private lateinit var tts: TTS
+    private var totalScannedValue: Double = 0.0
 
+    //////////////////////database///////////////////////////////////
 private fun addToDatabase(value: ScannedMoney) {
     lifecycleScope.launch {
         try {
@@ -65,12 +69,41 @@ private fun addToDatabase(value: ScannedMoney) {
     }
 }
 
+    private fun fetchFromDatabase(){
+        lifecycleScope.launch {
+            try {
+                println("Fetchhhhh")
+                val result = fetchFromDB(applicationContext)
+                println("Fetch from DB result: $result")
+                println("Total value from result: ${result?.get(0)?.totalValue}")
+                if(result != null) totalScannedValue = result[0].totalValue!!
+            } catch (error: Throwable) {
+                println("Error: ${error.message}")
+                error.printStackTrace()
+            }
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////
+
     private var storedExchangeRates: Map<String, Double>? = null
     private var dateTime: LocalDateTime? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        ////database test//////////////////
+        /*lifecycleScope.launch {
+            val scannedMoney = ScannedMoney(1, 100.0)
+            addToDatabase(scannedMoney)
+        }
+
+        lifecycleScope.launch {
+            fetchFromDatabase()
+            println("Fetch from DB resulttttttttt")
+        }*/
+
         //////////////////tflite//////////////////////
         if(!hasCameraPermission()) {
             ActivityCompat.requestPermissions(
@@ -105,13 +138,6 @@ private fun addToDatabase(value: ScannedMoney) {
         }
         val customSharedPreferences: CustomSharedPreferences = CustomSharedPreferences(applicationContext)
         storedExchangeRates = customSharedPreferences.getMap("exchange_rates")
-
-        ////database test
-        /*lifecycleScope.launch {
-            val scannedMoney = ScannedMoney(1, 100.0)
-            addToDatabase(scannedMoney)
-        }*/
-
 
 
       //  println("TOTAL VALUE2 $totalValue")
@@ -153,20 +179,24 @@ private fun addToDatabase(value: ScannedMoney) {
                     ScanningScreen(navController = navController, controller = controller, classifications = classifications, textToSpeech = tts)
                 }
                 composable("WelcomeScreen") {
-                    WelcomeScreen(navController = navController, textToSpeech = tts)
+                    WelcomeScreen(navController = navController)
                 }
                 composable("AfterScanScreen") {
                     AfterScanScreen(navController = navController)
                 }
                 composable("CurrenciesListScreen") {
-                    CurrenciesListScreen(navController = navController, exchangeRates = storedExchangeRates, textToSpeech = tts)
+                    CurrenciesListScreen(navController = navController, exchangeRates = storedExchangeRates)
                 }
                 composable(
-                    "ConversionScreen/{value}",
-                    arguments = listOf(navArgument("value") { type = NavType.FloatType })
+                    "ConversionScreen/{value}/{currency}",
+                    arguments = listOf(
+                        navArgument("value") { type = NavType.FloatType },
+                        navArgument("currency") { type = NavType.StringType }
+                    )
                 ) { backStackEntry ->
                     val value = backStackEntry.arguments?.getFloat("value") ?: 0.0f
-                    ConversionScreen(navController = navController, value.toDouble(), textToSpeech = tts)
+                    val currency = backStackEntry.arguments?.getString("currency") ?: ""
+                    ConversionScreen(navController = navController, value.toDouble(), currency)
                 }
             }
         }

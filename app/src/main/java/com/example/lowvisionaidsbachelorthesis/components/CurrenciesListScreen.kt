@@ -41,8 +41,8 @@ import com.example.lowvisionaidsbachelorthesis.textToSpeech.TTS
 
 
 @Composable
-fun CurrenciesListScreen(navController: NavHostController, exchangeRates: Map<String, Double>?, textToSpeech: TTS) {
-    textToSpeech.speak(stringResource(id = R.string.choose_currency), 5000)
+fun CurrenciesListScreen(navController: NavHostController, exchangeRates: Map<String, Double>?) {
+    //textToSpeech.speak(stringResource(id = R.string.choose_currency), 5000)
 
     //val exchangeRatesState = remember { mutableStateOf<Map<String, Double>?>(null) }
 
@@ -163,6 +163,7 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                                         modifier = Modifier.height(330.dp)
                                     ) {
                                         items(filteredCurrencies.size) { index ->
+                                            println("za slanje currencxy ${filteredCurrencies[index]}")
                                             SearchResultItem(
                                                 text = filteredCurrencies[index],
                                                 isLastItem = index == filteredCurrencies.lastIndex,
@@ -173,6 +174,8 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                                                             exchangeRates?.get(
                                                                 filteredCurrencies[index]
                                                             )
+                                                        }/${
+                                                            filteredCurrencies[index]
                                                         }"
                                                     )
                                                 }
