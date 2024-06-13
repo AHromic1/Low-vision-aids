@@ -18,14 +18,10 @@ class ExchangeRatesViewModel : ViewModel() {
             try {
                 val response = ExchangeRatesRetrofit.api.getLatestRates(baseCurrency)
                 _exchangeRates.postValue(response.rates)
-              /*  println("RESPONSE RESULT:")
-                response.rates.forEach { (currency, rate) ->
-                    println("$currency: $rate")
-                }*/
             } catch (e: HttpException) {
-                // Handle HTTP exceptions
+                println(e)
             } catch (e: Exception) {
-                // Handle other exceptions
+                println(e)
             }
         }
     }

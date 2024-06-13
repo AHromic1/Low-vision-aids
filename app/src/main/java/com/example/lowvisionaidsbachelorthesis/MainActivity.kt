@@ -7,42 +7,34 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.speech.tts.TextToSpeech
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.example.lowvisionaidsbachelorthesis.components.*
-import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoney
 import com.example.lowvisionaidsbachelorthesis.exchangeRatesAPI.ExchangeRatesViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoneyRepository.Companion.fetchFromDB
 import java.util.*
-
-import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoneyRepository.Companion.writeToDB
 import com.example.lowvisionaidsbachelorthesis.textToSpeech.TTS
 import com.example.lowvisionaidsbachelorthesis.tflite.Classification
 import com.example.lowvisionaidsbachelorthesis.tflite.LandmarkImageAnalyzer
@@ -54,56 +46,11 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private val exchangeRatesViewModel by viewModels<ExchangeRatesViewModel>()
     private lateinit var textToSpeech: TextToSpeech
     private lateinit var tts: TTS
-    private var totalScannedValue: Double = 0.0
-
-    //////////////////////database///////////////////////////////////
-private fun addToDatabase(value: ScannedMoney) {
-    lifecycleScope.launch {
-        try {
-            val result = writeToDB(applicationContext, value)
-            println("Write to DB result: $result")
-        } catch (error: Throwable) {
-            println("Error: ${error.message}")
-            error.printStackTrace()
-        }
-    }
-}
-
-    private fun fetchFromDatabase(){
-        lifecycleScope.launch {
-            try {
-                println("Fetchhhhh")
-                val result = fetchFromDB(applicationContext)
-                println("Fetch from DB result: $result")
-                println("Total value from result: ${result?.get(0)?.totalValue}")
-                if(result != null) totalScannedValue = result[0].totalValue!!
-            } catch (error: Throwable) {
-                println("Error: ${error.message}")
-                error.printStackTrace()
-            }
-        }
-    }
-
-    /////////////////////////////////////////////////////////////////
-
-    private var storedExchangeRates: Map<String, Double>? = null
     private var dateTime: LocalDateTime? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        ////database test//////////////////
-        /*lifecycleScope.launch {
-            val scannedMoney = ScannedMoney(1, 100.0)
-            addToDatabase(scannedMoney)
-        }
-
-        lifecycleScope.launch {
-            fetchFromDatabase()
-            println("Fetch from DB resulttttttttt")
-        }*/
-
         //////////////////tflite//////////////////////
         if(!hasCameraPermission()) {
             ActivityCompat.requestPermissions(
@@ -118,35 +65,33 @@ private fun addToDatabase(value: ScannedMoney) {
 
         dateTime = LocalDateTime.now()
 
-        lifecycleScope.launch {
-            println("Launcheddd")
-            val sharedPreferences = CustomSharedPreferences(applicationContext)
-            //println("Has one day elapsed ${hasOneDayElapsed(sharedPreferences)}")
-            val hasElapsed = hasOneDayElapsed(sharedPreferences)
-            println("Has elapsed $hasElapsed")
-            if(hasElapsed) {
-                println("elapseddddd")
-                exchangeRatesViewModel.fetchExchangeRates("BAM")
-                exchangeRatesViewModel.exchangeRates.observe(this@MainActivity) { rates ->
-                    rates?.let {
-                        sharedPreferences.saveMap("exchange_rates", it)
-                        storedExchangeRates = sharedPreferences.getMap("exchange_rates")
-                        //println("STORED IN MAIN: $storedExchangeRates")
+
+
+
+        setContent {
+
+            var storedExchangeRates by remember { mutableStateOf<Map<String, Double>?>(null) }
+
+            LaunchedEffect(applicationContext) {
+                println("Launcheddd")
+                val sharedPreferences = CustomSharedPreferences(applicationContext)
+                //println("Has one day elapsed ${hasOneDayElapsed(sharedPreferences)}")
+                val hasElapsed = hasOneDayElapsed(sharedPreferences)
+                println("Has elapsed $hasElapsed")
+                if(hasElapsed) {
+                    println("elapseddddd")
+                    exchangeRatesViewModel.fetchExchangeRates("BAM")
+                    exchangeRatesViewModel.exchangeRates.observe(this@MainActivity) { rates ->
+                        rates?.let {
+                            sharedPreferences.saveMap("exchange_rates", it)
+                            storedExchangeRates = sharedPreferences.getMap("exchange_rates")
+                        }
                     }
                 }
             }
-        }
-        val customSharedPreferences: CustomSharedPreferences = CustomSharedPreferences(applicationContext)
-        storedExchangeRates = customSharedPreferences.getMap("exchange_rates")
+            val customSharedPreferences: CustomSharedPreferences = CustomSharedPreferences(applicationContext)
+            storedExchangeRates = customSharedPreferences.getMap("exchange_rates")
 
-
-      //  println("TOTAL VALUE2 $totalValue")
-
-        /////
-
-        //exchangeRatesViewModel.fetchExchangeRates("BAM")
-
-        setContent {
             ////////////////////tflite//////////////////////////////////
             var classifications by remember {
                 mutableStateOf(emptyList<Classification>())
@@ -244,7 +189,7 @@ private fun addToDatabase(value: ScannedMoney) {
             false
         }
     }
-    /////////////////////TTS
+    /////////////////////TTS////////////////
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
             val defaultLocale = Locale.getDefault()
@@ -258,13 +203,6 @@ private fun addToDatabase(value: ScannedMoney) {
         }
     }
 
-     fun speak(text: String) {
-        val handler = Handler(Looper.getMainLooper())
-        handler.postDelayed({
-            textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
-        }, 5000)
-    }
-
     override fun onDestroy() {
         if (textToSpeech.isSpeaking) {
             textToSpeech.stop()
@@ -272,11 +210,6 @@ private fun addToDatabase(value: ScannedMoney) {
         textToSpeech.shutdown()
         super.onDestroy()
     }
-
-    /*private fun addScannedMoney() {
-        val scannedMoney = ScannedMoney(0,  100.0)
-        scannedMoneyViewModel.insert(scannedMoney)
-    }*/
 
     private fun hasCameraPermission() = ContextCompat.checkSelfPermission(
         this, Manifest.permission.CAMERA

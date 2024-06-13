@@ -44,7 +44,6 @@ fun ConversionScreen(navController: NavHostController, value: Double = 0.0, curr
     LaunchedEffect(context) {
         try {
             totalScannedValue = ScannedMoneyRepository.fetchFromDB(context)?.get(0)?.totalValue ?: 0.0
-            //println("Fetched and rounded value: $roundedValue")
             convertedValue = BigDecimal(totalScannedValue * value).setScale(2, RoundingMode.CEILING)
         } catch (error: Throwable) {
             println("Error: ${error.message}")
@@ -133,7 +132,7 @@ fun ConversionScreen(navController: NavHostController, value: Double = 0.0, curr
                                     .padding(10.dp)
                                     .clickable(
                                         onClickLabel = stringResource(R.string.new_conversion),
-                                        onClick = { }
+                                        onClick = { navController.navigate("CurrenciesListScreen") }
                                     ),
                                 style = TextStyle(fontSize = 17.sp)
                             )

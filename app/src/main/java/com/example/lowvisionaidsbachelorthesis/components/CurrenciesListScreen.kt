@@ -43,18 +43,6 @@ import com.example.lowvisionaidsbachelorthesis.textToSpeech.TTS
 @Composable
 fun CurrenciesListScreen(navController: NavHostController, exchangeRates: Map<String, Double>?) {
     //textToSpeech.speak(stringResource(id = R.string.choose_currency), 5000)
-
-    //val exchangeRatesState = remember { mutableStateOf<Map<String, Double>?>(null) }
-
-   /* LaunchedEffect(Unit) {
-        viewModel.fetchExchangeRates("BAM")
-        exchangeRatesState.value = viewModel.exchangeRates.value
-        println("FETCHED: ${exchangeRatesState.value}")
-
-    }*/
-
-    //val exchangeRates by viewModel.exchangeRates.observeAsState()
-
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Black
