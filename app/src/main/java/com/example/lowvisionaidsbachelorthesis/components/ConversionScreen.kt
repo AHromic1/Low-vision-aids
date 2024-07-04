@@ -35,8 +35,6 @@ import java.math.BigDecimal
 
 @Composable
 fun ConversionScreen(navController: NavHostController, value: Double = 0.0, currency: String) {
-    //textToSpeech.speak(stringResource(id = R.string.converted_value), 5000)
-    println("poslana currency $currency")
     val context = LocalContext.current
     var totalScannedValue by remember { mutableStateOf(0.0) }
     var convertedValue by remember { mutableStateOf(BigDecimal(totalScannedValue).setScale(2, RoundingMode.CEILING)) }
@@ -46,7 +44,6 @@ fun ConversionScreen(navController: NavHostController, value: Double = 0.0, curr
             totalScannedValue = ScannedMoneyRepository.fetchFromDB(context)?.get(0)?.totalValue ?: 0.0
             convertedValue = BigDecimal(totalScannedValue * value).setScale(2, RoundingMode.CEILING)
         } catch (error: Throwable) {
-            println("Error: ${error.message}")
             error.printStackTrace()
         }
     }
@@ -85,7 +82,8 @@ fun ConversionScreen(navController: NavHostController, value: Double = 0.0, curr
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(50.dp))
-                                .background(Black)
+                                .background(Black),
+                            contentAlignment = Alignment.Center
                         ){
                             Column(
                                 modifier = Modifier.padding(13.dp),//.semantics(mergeDescendants = true){},

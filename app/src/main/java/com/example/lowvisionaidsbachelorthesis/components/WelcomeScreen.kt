@@ -17,6 +17,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.navigation.NavHostController
 import com.example.lowvisionaidsbachelorthesis.R
@@ -37,7 +38,7 @@ fun WelcomeScreen(navController: NavHostController) {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = CenterHorizontally
         ) {
             Text(
                 text = stringResource(id = R.string.welcome),
@@ -101,12 +102,15 @@ fun InnerScreen(navController: NavHostController) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(50.dp))
-                            .background(Black)
+                            .background(Black),
+                        contentAlignment = Alignment.Center
                     ) {
                         Column(
-                            modifier = Modifier.padding(13.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(13.dp),
                             verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = CenterHorizontally
+                            horizontalAlignment = Alignment.CenterHorizontally // Corrected Alignment.CenterHorizontally
                         ) {
                             Text(
                                 text = stringResource(id = R.string.total_scanned_value),
@@ -196,10 +200,8 @@ fun InnerScreen(navController: NavHostController) {
 suspend fun goToNewScan(navController: NavHostController, context: Context) {
     try {
         val result = ScannedMoneyRepository.deleteByIdFromDB(context, 1)
-        println("izbrisano iz baze? $result")
         navController.navigate("ScanningScreen")
     } catch (error: Throwable) {
-        println("Error: ${error.message}")
         error.printStackTrace()
     }
 }

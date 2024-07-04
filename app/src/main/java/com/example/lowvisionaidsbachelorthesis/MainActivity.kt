@@ -73,13 +73,10 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             var storedExchangeRates by remember { mutableStateOf<Map<String, Double>?>(null) }
 
             LaunchedEffect(applicationContext) {
-                println("Launcheddd")
                 val sharedPreferences = CustomSharedPreferences(applicationContext)
-                //println("Has one day elapsed ${hasOneDayElapsed(sharedPreferences)}")
                 val hasElapsed = hasOneDayElapsed(sharedPreferences)
-                println("Has elapsed $hasElapsed")
+
                 if(hasElapsed) {
-                    println("elapseddddd")
                     exchangeRatesViewModel.fetchExchangeRates("BAM")
                     exchangeRatesViewModel.exchangeRates.observe(this@MainActivity) { rates ->
                         rates?.let {
@@ -103,7 +100,6 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     ),
                     onResults = {
                         classifications = it
-                        println("CLASSIFICATIONS $classifications")
                     }
                 )
             }
@@ -179,7 +175,6 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private fun hasOneDayElapsed(customSharedPreferences: CustomSharedPreferences): Boolean {
         val formatter = DateTimeFormatter.ISO_DATE
         val lastRunDate = customSharedPreferences.getDateTime("last_run_date")?.let { LocalDate.parse(it, formatter) }
-        println("LAST RUN DATE, $lastRunDate")
         val today = LocalDate.now()
 
         return if (lastRunDate == null || today.isAfter(lastRunDate)) {

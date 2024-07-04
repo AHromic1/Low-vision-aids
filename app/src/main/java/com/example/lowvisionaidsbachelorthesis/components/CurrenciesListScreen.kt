@@ -37,12 +37,10 @@ import com.example.lowvisionaidsbachelorthesis.ui.theme.Gray
 
 import androidx.compose.ui.res.stringResource
 import com.example.lowvisionaidsbachelorthesis.R
-import com.example.lowvisionaidsbachelorthesis.textToSpeech.TTS
 
 
 @Composable
 fun CurrenciesListScreen(navController: NavHostController, exchangeRates: Map<String, Double>?) {
-    //textToSpeech.speak(stringResource(id = R.string.choose_currency), 5000)
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Black
@@ -73,9 +71,9 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
     var searchText by remember { mutableStateOf(TextFieldValue()) }
 
     val currencyCodes = exchangeRates?.keys?.toList() ?: emptyList()
-    val filteredCurrencies = remember(searchText.text) {
+    val filteredCurrencies = remember(searchText.text.trim()) {
         currencyCodes.filter {
-            it.contains(searchText.text, ignoreCase = true)
+            it.contains(searchText.text.trim(), ignoreCase = true)
         }
     }
 
@@ -108,7 +106,6 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                             .fillMaxWidth()
                     ) {
                         Column(
-                            modifier = Modifier.padding(13.dp),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = CenterHorizontally
                         ) {
@@ -118,7 +115,7 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                                 backgroundColor = White,
                                 topBar = {
                                     TopAppBar(
-                                        backgroundColor = Gray,
+                                        backgroundColor = White,
                                         modifier = Modifier
                                             .padding(0.dp, 10.dp)
                                             .fillMaxWidth()
@@ -138,7 +135,7 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                                                         contentDescription = null
                                                     )
                                                 },
-                                                textStyle = TextStyle(color = White)
+                                                textStyle = TextStyle(color = Black)
                                             )
                                         }
                                     )
@@ -151,12 +148,10 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                                         modifier = Modifier.height(330.dp)
                                     ) {
                                         items(filteredCurrencies.size) { index ->
-                                            println("za slanje currencxy ${filteredCurrencies[index]}")
                                             SearchResultItem(
                                                 text = filteredCurrencies[index],
                                                 isLastItem = index == filteredCurrencies.lastIndex,
                                                 onClick = {
-                                                    //println("Clicked on currency: ${filteredCurrencies[index]}")
                                                     navController.navigate(
                                                         "ConversionScreen/${
                                                             exchangeRates?.get(
@@ -169,15 +164,10 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                                                 }
                                             )
                                         }
-                                        //println("FILTERED CURRENCIES $filteredCurrencies")
                                     }
                                 }
-                           // }
-
-                        //
                             BottomNavigation(navController = navController, "conversion")
                         }
-
                     }
                 }
             }
@@ -208,7 +198,6 @@ fun SearchResultItem(text: String, isLastItem: Boolean, onClick: () -> Unit) {
 fun BottomNavigation(navController: NavHostController, screenActivity: String){
     var conversionEnabled: Boolean = true
     var scanningEnabled: Boolean = true
-    var bothEnabled: Boolean = true
 
     var conversionButtonColor = Black
     var scanningButtonColor = Black
@@ -218,13 +207,11 @@ fun BottomNavigation(navController: NavHostController, screenActivity: String){
 
     if(screenActivity == "scanning"){
         scanningEnabled = false
-        bothEnabled = false
         scanningButtonColor = Gray
         scanningTextColor = Black
     }
     else if(screenActivity == "conversion"){
         conversionEnabled = false
-        bothEnabled = false
         conversionButtonColor = Gray
         conversionTextColor = Black
     }
@@ -308,8 +295,6 @@ fun BottomNavigation(navController: NavHostController, screenActivity: String){
 @Composable
 fun Link() {
     val mAnnotatedLinkString = buildAnnotatedString {
-
-        //val mStr = "Rates By Exchange Rate API"
         val mStr = "Rates By Exchange Rate API www.exchangerate-api.com"
         val mStartIndex = mStr.indexOf("Rates")
         val mEndIndex = mStartIndex + 26
@@ -318,33 +303,13 @@ fun Link() {
         addStyle(
             style = SpanStyle(
                 color = Black,
-                //textDecoration = TextDecoration.Underline,
                 fontSize = 8.sp
             ), start = mStartIndex, end = mEndIndex
         )
-
-        /* addStringAnnotation(
-             tag = "URL",
-             annotation = "https://www.exchangerate-api.com",
-             start = mStartIndex,
-             end = mEndIndex
-         )*/
     }
 
-    //val mUriHandler = LocalUriHandler.current
-
-    Column(Modifier.height(20.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+    Column(Modifier.height(20.dp), horizontalAlignment = CenterHorizontally, verticalArrangement = Arrangement.Center) {
         Text(text = mAnnotatedLinkString)
-        /*ClickableText(
-            text = mAnnotatedLinkString,
-            onClick = {
-                mAnnotatedLinkString
-                    .getStringAnnotations("URL", it, it)
-                    .firstOrNull()?.let { stringAnnotation ->
-                        mUriHandler.openUri(stringAnnotation.item)
-                    }
-            }
-        )*/
     }
 }
 
