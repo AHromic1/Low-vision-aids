@@ -11,6 +11,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -24,7 +26,9 @@ import com.example.lowvisionaidsbachelorthesis.R
 import com.example.lowvisionaidsbachelorthesis.components.BottomNavigation
 import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoneyRepository
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Black
-import com.example.lowvisionaidsbachelorthesis.ui.theme.White
+import com.example.lowvisionaidsbachelorthesis.ui.theme.Linen
+import com.example.lowvisionaidsbachelorthesis.ui.theme.Martinique
+import com.example.lowvisionaidsbachelorthesis.ui.theme.Smoky
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -33,7 +37,7 @@ import java.math.RoundingMode
 fun WelcomeScreen(navController: NavHostController) {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Black
+        color = Martinique
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -42,7 +46,7 @@ fun WelcomeScreen(navController: NavHostController) {
         ) {
             Text(
                 text = stringResource(id = R.string.welcome),
-                color = White,
+                color = Linen,
                 style = TextStyle(fontSize = 50.sp, fontWeight = FontWeight.Bold),
                 modifier = Modifier
                     .padding(top = 40.dp)
@@ -66,18 +70,17 @@ fun InnerScreen(navController: NavHostController) {
     LaunchedEffect(context) {
         try {
             val valueFromDB = ScannedMoneyRepository.fetchFromDB(context)?.get(0)?.totalValue ?: 0.0
+
             totalScannedValue = valueFromDB
             roundedValue = BigDecimal(totalScannedValue).setScale(2, RoundingMode.CEILING)
-            println("Fetched and rounded value: $roundedValue")
         } catch (error: Throwable) {
-            println("Error: ${error.message}")
             error.printStackTrace()
         }
     }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Black
+        color = Martinique
     ) {
         Column(
             modifier = Modifier
@@ -91,7 +94,7 @@ fun InnerScreen(navController: NavHostController) {
                     .fillMaxHeight()
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp))
-                    .background(White)
+                    .background(Linen)
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp),
@@ -102,7 +105,7 @@ fun InnerScreen(navController: NavHostController) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(50.dp))
-                            .background(Black),
+                            .background(Smoky),
                         contentAlignment = Alignment.Center
                     ) {
                         Column(
@@ -110,11 +113,11 @@ fun InnerScreen(navController: NavHostController) {
                                 .fillMaxWidth()
                                 .padding(13.dp),
                             verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally // Corrected Alignment.CenterHorizontally
+                            horizontalAlignment = CenterHorizontally
                         ) {
                             Text(
                                 text = stringResource(id = R.string.total_scanned_value),
-                                color = White,
+                                color = Linen,
                                 style = TextStyle(fontSize = 20.sp),
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
@@ -129,7 +132,7 @@ fun InnerScreen(navController: NavHostController) {
                             ) {
                                 Text(
                                     text = roundedValue.toString(),
-                                    color = White,
+                                    color = Linen,
                                     style = TextStyle(
                                         fontSize = 50.sp,
                                         fontWeight = FontWeight.Bold
@@ -139,7 +142,7 @@ fun InnerScreen(navController: NavHostController) {
                                 )
                                 Text(
                                     text = "KM",
-                                    color = White,
+                                    color = Linen,
                                     style = TextStyle(
                                         fontSize = 50.sp,
                                         fontWeight = FontWeight.Bold
@@ -158,13 +161,20 @@ fun InnerScreen(navController: NavHostController) {
                     Button(
                         onClick = { navController.navigate("ScanningScreen") },
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(Black),
+                            .fillMaxWidth()
+                            .shadow(
+                                elevation = 5.dp,
+                            )
+                            .background(
+                                color = Smoky,
+                                shape = RoundedCornerShape(8.dp)
+                            ),
+                        colors = ButtonDefaults.buttonColors(Smoky),
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         Text(
                             text = stringResource(R.string.continue_scanning),
-                            color = White,
+                            color = Linen,
                             modifier = Modifier.padding(10.dp),
                             style = TextStyle(fontSize = 17.sp)
                         )
@@ -172,20 +182,25 @@ fun InnerScreen(navController: NavHostController) {
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
                         onClick = {
-
                             coroutineScope.launch {
                                 goToNewScan(navController, context)
                             }
-
                         },
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(Black),
+                            .fillMaxWidth()
+                            .shadow(
+                                elevation = 5.dp,
+                            )
+                            .background(
+                            color = Smoky,
+                            shape = RoundedCornerShape(8.dp)
+                        ),
+                        colors = ButtonDefaults.buttonColors(Smoky),
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         Text(
                             text = stringResource(R.string.new_scan),
-                            color = White,
+                            color = Linen,
                             modifier = Modifier.padding(10.dp),
                             style = TextStyle(fontSize = 17.sp)
                         )

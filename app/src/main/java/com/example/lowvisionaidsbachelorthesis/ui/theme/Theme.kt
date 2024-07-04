@@ -8,15 +8,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.material.Typography
 
 private val DarkColorPalette = darkColors(
-    primary = Black,
-    primaryVariant = Gray,
-    secondary = White,
+    primary = Martinique,
+    primaryVariant = Smoky,
+    secondary = Linen,
 )
 
 private val LightColorPalette = lightColors(
-    primary = White,
-    primaryVariant = Gray,
-    secondary = Black,
+    primary = Linen,
+    primaryVariant = Smoky,
+    secondary = Martinique,
 )
 
 val typography = Typography()

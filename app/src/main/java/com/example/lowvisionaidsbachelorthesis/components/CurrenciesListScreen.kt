@@ -20,40 +20,38 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import com.example.lowvisionaidsbachelorthesis.ui.theme.Black
-import com.example.lowvisionaidsbachelorthesis.ui.theme.White
-
 import android.annotation.SuppressLint
 import androidx.compose.foundation.*
 import androidx.compose.material.*
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Gray
-
 import androidx.compose.ui.res.stringResource
 import com.example.lowvisionaidsbachelorthesis.R
+import com.example.lowvisionaidsbachelorthesis.ui.theme.LightLinen
+import com.example.lowvisionaidsbachelorthesis.ui.theme.Linen
+import com.example.lowvisionaidsbachelorthesis.ui.theme.Martinique
 
 
 @Composable
 fun CurrenciesListScreen(navController: NavHostController, exchangeRates: Map<String, Double>?) {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Black
+        color = Martinique
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = CenterHorizontally
         ) {
             Text(
                 text = stringResource(id = R.string.choose_currency_text),
-                color = White,
+                color = Linen,
                 style = TextStyle(fontSize = 30.sp, fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(top = 40.dp).clickable(
                     onClickLabel = stringResource(R.string.choose_currency),
@@ -80,7 +78,7 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
     Surface(
         shape = RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp),
         modifier = Modifier.fillMaxSize(),
-        color = Black
+        color = Martinique
     ) {
         Column(
             modifier = Modifier
@@ -94,7 +92,7 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                     .fillMaxHeight()
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp))
-                    .background(White)
+                    .background(Linen)
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp),
@@ -112,10 +110,10 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                             Link()
                                 Scaffold(
                                     modifier = Modifier.height(70.dp),
-                                backgroundColor = White,
+                                backgroundColor = Linen,
                                 topBar = {
                                     TopAppBar(
-                                        backgroundColor = White,
+                                        backgroundColor = Linen,
                                         modifier = Modifier
                                             .padding(0.dp, 10.dp)
                                             .fillMaxWidth()
@@ -135,14 +133,14 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
                                                         contentDescription = null
                                                     )
                                                 },
-                                                textStyle = TextStyle(color = Black)
+                                                textStyle = TextStyle(color = Martinique)
                                             )
                                         }
                                     )
                                 }
                             ) { }
                                 Box(
-                                    modifier = Modifier.height(330.dp)
+                                    modifier = Modifier.height(330.dp),
                                 ) {
                                     LazyColumn(
                                         modifier = Modifier.height(330.dp)
@@ -183,15 +181,19 @@ fun SearchResultItem(text: String, isLastItem: Boolean, onClick: () -> Unit) {
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .then(if (!isLastItem) Modifier.padding(bottom = 8.dp) else Modifier)
             .clickable { onClick() },
-        elevation = 4.dp
+        elevation = 4.dp,
+        backgroundColor = LightLinen,
+        shape = RoundedCornerShape(8.dp)
     ) {
         Text(
             text = text,
             fontSize = 18.sp,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
+            color = Martinique
         )
     }
 }
+
 
 
 @Composable
@@ -199,21 +201,21 @@ fun BottomNavigation(navController: NavHostController, screenActivity: String){
     var conversionEnabled: Boolean = true
     var scanningEnabled: Boolean = true
 
-    var conversionButtonColor = Black
-    var scanningButtonColor = Black
-    var conversionTextColor = White
-    var scanningTextColor = White
+    var conversionButtonColor = Martinique
+    var scanningButtonColor = Martinique
+    var conversionTextColor = Linen
+    var scanningTextColor = Linen
 
 
     if(screenActivity == "scanning"){
         scanningEnabled = false
         scanningButtonColor = Gray
-        scanningTextColor = Black
+        scanningTextColor = Martinique
     }
     else if(screenActivity == "conversion"){
         conversionEnabled = false
         conversionButtonColor = Gray
-        conversionTextColor = Black
+        conversionTextColor = Martinique
     }
 
     Box(
@@ -244,7 +246,8 @@ fun BottomNavigation(navController: NavHostController, screenActivity: String){
                     .clickable(
                         onClickLabel = stringResource(R.string.scanning_bttn),
                         onClick = {navController.navigate("WelcomeScreen")}
-                    ),
+                    )
+                ,
                 enabled = scanningEnabled,
                 colors = ButtonDefaults.buttonColors(scanningButtonColor),
                 shape = RoundedCornerShape(bottomStart = 20.dp, topStart = 20.dp, topEnd = 90.dp)
@@ -302,7 +305,7 @@ fun Link() {
         append(mStr)
         addStyle(
             style = SpanStyle(
-                color = Black,
+                color = Martinique,
                 fontSize = 8.sp
             ), start = mStartIndex, end = mEndIndex
         )
