@@ -12,7 +12,7 @@ import org.tensorflow.lite.task.vision.classifier.ImageClassifier
 
 class TfLiteLandmarkClassifier(
     private val context: Context,
-    private val threshold: Float = 0.5f,
+    private val threshold: Float = 0.9f,
     private val maxResults: Int = 1
 ): LandmarkClassifier {
 
@@ -31,7 +31,7 @@ class TfLiteLandmarkClassifier(
         try {
             classifier = ImageClassifier.createFromFileAndOptions(
                 context,
-                "metadata3.tflite",
+                "model_with_metadata.tflite",
                 options
             )
         } catch (e: IllegalStateException) {
@@ -64,56 +64,6 @@ class TfLiteLandmarkClassifier(
             }
         }?.distinctBy { it.name } ?: emptyList()
     }
-    /////////////////////
-      fun classify2(bitmap: Bitmap, rotation: Int): List<Classification> {
-        if(classifier == null) {
-            setupClassifier()
-        }
-
-        // Ensure the bitmap is the correct size
-        val targetSize = Size(224, 224) // or whatever your model requires
-        val resizedBitmap = Bitmap.createScaledBitmap(bitmap, targetSize.width, targetSize.height, true)
-
-        // Process the image
-        val imageProcessor = ImageProcessor.Builder().build()
-        val tensorImage = imageProcessor.process(TensorImage.fromBitmap(resizedBitmap))
-
-        // Set image orientation
-        val imageProcessingOptions = ImageProcessingOptions.builder()
-            .setOrientation(getOrientationFromRotation(rotation))
-            .build()
-
-        // Classify the image
-        val results = classifier?.classify(tensorImage, imageProcessingOptions)
-
-        // Debugging: Print the raw results
-        println("RESULTS $results")
-
-        results?.forEach { classifications ->
-            classifications.categories.forEach { category ->
-                val label = category.label
-                println("Labell")
-                println("Label: $label")
-            }
-        }
-
-        val classificationsList = results?.flatMap { classifications ->
-            classifications.categories.map { category ->
-                println("CATEGORY LABEL $category.label")
-                Classification(
-                    name = category.label,
-                    score = category.score
-                )
-            }
-        }?.distinctBy { it.name } ?: emptyList()
-
-        classificationsList.forEach { classification ->
-            println("Classification: ${classification.name}, Score: ${classification.score}")
-        }
-
-        return classificationsList
-    }
-    //////////////////////////////
 
     private fun getOrientationFromRotation(rotation: Int): ImageProcessingOptions.Orientation {
         return when(rotation) {

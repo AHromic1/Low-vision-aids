@@ -7,7 +7,6 @@ class LandmarkImageAnalyzer(
     private val classifier: LandmarkClassifier,
     private val onResults: (List<Classification>) -> Unit
 ): ImageAnalysis.Analyzer {
-
     private var frameSkipCounter = 0
 
     override fun analyze(image: ImageProxy) {
