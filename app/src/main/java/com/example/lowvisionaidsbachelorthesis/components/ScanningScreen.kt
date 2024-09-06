@@ -57,7 +57,6 @@ fun ScanningScreen(navController: NavHostController, controller: LifecycleCamera
                 textToSpeech.speak(unit, 500)
 
                 val formattedValue = formatValue(number.toDoubleOrNull(), unit)
-                println("FORMATIRANA VR $formattedValue")
                 var scannedMoney = ScannedMoney(1, formattedValue)
                 var totalValue: Double? = 0.0
 
@@ -68,15 +67,10 @@ fun ScanningScreen(navController: NavHostController, controller: LifecycleCamera
 
                         var valueFromDB = ScannedMoneyRepository.fetchFromDB(context)
 
-                        //println("iz baze je ${formatValue(valueFromDB!![0].totalValue, unit)}")
                         if (valueFromDB != null) {
                             if (valueFromDB.isEmpty()) {
-                                println("nema u bazi")
                                 val result = ScannedMoneyRepository.writeToDB(context, scannedMoney)
-                                println("Uspjesno dodavanje? $result")
-
                                 valueFromDB = ScannedMoneyRepository.fetchFromDB(context)
-                                println("iz baze 2 je $valueFromDB")
                             } else {
 
 
@@ -87,12 +81,8 @@ fun ScanningScreen(navController: NavHostController, controller: LifecycleCamera
                                 }
                                 scannedMoney = ScannedMoney(1, totalValue)
 
-                                println("ima u bazi")
                                 val result = ScannedMoneyRepository.updateDB(context, scannedMoney)
-                                println("Uspjesan update? $result")
-
                                 valueFromDB = ScannedMoneyRepository.fetchFromDB(context)
-                                println("iz baze3 je $valueFromDB")
                             }
                         }
 
@@ -142,9 +132,7 @@ fun extractUnit(input: String): String {
 }
 
 fun formatValue(value:Double?, unit:String): Double?{
-    println("Unit je $unit")
     if(unit == "fenings") {
-        println("feninzi su")
         if (value != null) {
             return value/100
         }

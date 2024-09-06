@@ -6,12 +6,6 @@ import kotlinx.coroutines.withContext
 
 class ScannedMoneyRepository() {
     companion object {
-        //val totalValue: List<ScannedMoney> = scannedMoneyDao.getTotalValue()
-
-        /* suspend fun writeToDB(newValue: ScannedMoney) {
-        scannedMoneyDao.insert(newValue)
-    }*/
-
         suspend fun writeToDB(context: Context, value: ScannedMoney): String? {
             return withContext(Dispatchers.IO) {
                 try {

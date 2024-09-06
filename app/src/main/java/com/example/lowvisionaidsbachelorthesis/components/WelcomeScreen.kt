@@ -70,7 +70,6 @@ fun InnerScreen(navController: NavHostController) {
     LaunchedEffect(context) {
         try {
             val valueFromDB = ScannedMoneyRepository.fetchFromDB(context)?.get(0)?.totalValue ?: 0.0
-
             totalScannedValue = valueFromDB
             roundedValue = BigDecimal(totalScannedValue).setScale(2, RoundingMode.CEILING)
         } catch (error: Throwable) {
