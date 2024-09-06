@@ -31,14 +31,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Gray
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import com.example.lowvisionaidsbachelorthesis.R
 import com.example.lowvisionaidsbachelorthesis.ui.theme.LightLinen
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Linen
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Martinique
 
-
 @Composable
 fun CurrenciesListScreen(navController: NavHostController, exchangeRates: Map<String, Double>?) {
+    val customFont = FontFamily(
+        Font(R.font.roboto_mono)
+    )
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Martinique
@@ -52,6 +57,7 @@ fun CurrenciesListScreen(navController: NavHostController, exchangeRates: Map<St
             Text(
                 text = stringResource(id = R.string.choose_currency_text),
                 color = Linen,
+                fontFamily = customFont,
                 style = TextStyle(fontSize = 30.sp, fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(top = 40.dp).clickable(
                     onClickLabel = stringResource(R.string.choose_currency),
@@ -175,6 +181,10 @@ fun InnerScreenCurrency(navController: NavHostController, exchangeRates: Map<Str
 
 @Composable
 fun SearchResultItem(text: String, isLastItem: Boolean, onClick: () -> Unit) {
+    val customFont = FontFamily(
+        Font(R.font.roboto_mono)
+    )
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -188,110 +198,13 @@ fun SearchResultItem(text: String, isLastItem: Boolean, onClick: () -> Unit) {
         Text(
             text = text,
             fontSize = 18.sp,
+            fontFamily = customFont,
             modifier = Modifier.padding(16.dp),
             color = Martinique
         )
     }
 }
 
-@Composable
-fun BottomNavigation(navController: NavHostController, screenActivity: String){
-    var conversionEnabled = true
-    var scanningEnabled = true
-
-    var conversionButtonColor = Martinique
-    var scanningButtonColor = Martinique
-    var conversionTextColor = Linen
-    var scanningTextColor = Linen
-
-
-    if(screenActivity == "scanning"){
-        scanningEnabled = false
-        scanningButtonColor = Gray
-        scanningTextColor = Martinique
-    }
-    else if(screenActivity == "conversion"){
-        conversionEnabled = false
-        conversionButtonColor = Gray
-        conversionTextColor = Martinique
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(
-                onClickLabel = stringResource(R.string.conversion_bttn),
-                onClick = {}
-            ),
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 20.dp)
-                .clickable(
-                    onClickLabel = stringResource(R.string.conversion_bttn),
-                    onClick = {}
-                ),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Button(
-                onClick = { navController.navigate("WelcomeScreen") },
-                modifier = Modifier
-                    .width(180.dp)
-                    .height(70.dp)
-                    .clickable(
-                        onClickLabel = stringResource(R.string.scanning_bttn),
-                        onClick = {navController.navigate("WelcomeScreen")}
-                    )
-                ,
-                enabled = scanningEnabled,
-                colors = ButtonDefaults.buttonColors(scanningButtonColor),
-                shape = RoundedCornerShape(bottomStart = 20.dp, topStart = 20.dp, topEnd = 90.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.scanning),
-                    color = scanningTextColor,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 15.dp),
-                    style = TextStyle(
-                        fontSize = 21.sp,
-                        textAlign = TextAlign.Center
-                    )
-                )
-            }
-
-            Spacer(Modifier.width(2.dp))
-
-            Button(
-                onClick = { navController.navigate("CurrenciesListScreen")},
-                enabled = conversionEnabled,
-                modifier = Modifier
-                    .width(180.dp)
-                    .height(70.dp)
-                    .clickable(
-                        onClickLabel = stringResource(R.string.conversion_bttn),
-                        onClick = {navController.navigate("CurrenciesListScreen")}
-                    ),
-                colors = ButtonDefaults.buttonColors(conversionButtonColor),
-                shape = RoundedCornerShape(bottomStart = 90.dp, topEnd = 20.dp, bottomEnd = 20.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.conversion),
-                    color = conversionTextColor,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 15.dp),
-                    style = TextStyle(
-                        fontSize = 21.sp,
-                        textAlign = TextAlign.Center)
-                )
-            }
-        }
-    }
-}
 //attributions
 @Composable
 fun Link() {

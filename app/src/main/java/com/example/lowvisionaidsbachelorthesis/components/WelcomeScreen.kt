@@ -15,6 +15,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,6 +66,12 @@ fun InnerScreen(navController: NavHostController) {
     var totalScannedValue by remember { mutableStateOf(0.0) }
     var roundedValue by remember { mutableStateOf(BigDecimal(totalScannedValue).setScale(2, RoundingMode.CEILING)) }
     val coroutineScope = rememberCoroutineScope()
+    val customFont = FontFamily(
+        Font(R.font.roboto_mono)
+    )
+    val customNumberFont = FontFamily(
+        Font(R.font.poppins)
+    )
 
     LaunchedEffect(context) {
         try {
@@ -115,6 +123,7 @@ fun InnerScreen(navController: NavHostController) {
                             Text(
                                 text = stringResource(id = R.string.total_scanned_value),
                                 color = Linen,
+                                fontFamily = customFont,
                                 style = TextStyle(fontSize = 20.sp),
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
@@ -130,6 +139,7 @@ fun InnerScreen(navController: NavHostController) {
                                 Text(
                                     text = roundedValue.toString(),
                                     color = Linen,
+                                    fontFamily = customNumberFont,
                                     style = TextStyle(
                                         fontSize = 50.sp,
                                         fontWeight = FontWeight.Bold
@@ -140,6 +150,7 @@ fun InnerScreen(navController: NavHostController) {
                                 Text(
                                     text = "KM",
                                     color = Linen,
+                                    fontFamily = customFont,
                                     style = TextStyle(
                                         fontSize = 50.sp,
                                         fontWeight = FontWeight.Bold
@@ -172,6 +183,7 @@ fun InnerScreen(navController: NavHostController) {
                         Text(
                             text = stringResource(R.string.continue_scanning),
                             color = Linen,
+                            fontFamily = customFont,
                             modifier = Modifier.padding(10.dp),
                             style = TextStyle(fontSize = 17.sp)
                         )
@@ -198,6 +210,7 @@ fun InnerScreen(navController: NavHostController) {
                         Text(
                             text = stringResource(R.string.new_scan),
                             color = Linen,
+                            fontFamily = customFont,
                             modifier = Modifier.padding(10.dp),
                             style = TextStyle(fontSize = 17.sp)
                         )

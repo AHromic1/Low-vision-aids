@@ -14,7 +14,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +38,12 @@ import java.math.RoundingMode
 @Composable
 fun AfterScanScreen(navController: NavHostController, lastValue: String) {
     val roundedValue = BigDecimal(lastValue).setScale(2)
+    val customFont = FontFamily(
+        Font(R.font.roboto_mono)
+    )
+    val customNumberFont = FontFamily(
+        Font(R.font.poppins)
+    )
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -79,16 +88,26 @@ fun AfterScanScreen(navController: NavHostController, lastValue: String) {
                                 Text(
                                     text = stringResource(R.string.last_scanned_value),
                                     color = Linen,
+                                    fontFamily = customFont,
                                     style = TextStyle(fontSize = 20.sp),
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier.padding(start = 35.dp, end = 35.dp, top = 15.dp)
                                 )
                                 Row(
-                                    verticalAlignment = Alignment.CenterVertically,
+                                    Modifier.semantics(mergeDescendants = true) {}
                                 ) {
                                     Text(
-                                        text = roundedValue.toString() + " KM",
+                                        text = roundedValue.toString(),
                                         color = Linen,
+                                        fontFamily = customNumberFont,
+                                        style = TextStyle(fontSize = 50.sp, fontWeight = FontWeight.Bold),
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.padding(8.dp)
+                                    )
+                                    Text(
+                                        text = "KM",
+                                        color = Linen,
+                                        fontFamily = customFont,
                                         style = TextStyle(fontSize = 50.sp, fontWeight = FontWeight.Bold),
                                         textAlign = TextAlign.Center,
                                         modifier = Modifier.padding(8.dp)
@@ -107,6 +126,7 @@ fun AfterScanScreen(navController: NavHostController, lastValue: String) {
                             Text(
                                 text = stringResource(R.string.continue_scanning),
                                 color = Linen,
+                                fontFamily = customFont,
                                 modifier = Modifier.padding(10.dp),
                                 style = TextStyle(fontSize = 17.sp)
                             )
@@ -123,6 +143,7 @@ fun AfterScanScreen(navController: NavHostController, lastValue: String) {
                             Text(
                                 text = stringResource(R.string.end_scanning),
                                 color = Linen,
+                                fontFamily = customFont,
                                 modifier = Modifier.padding(10.dp),
                                 style = TextStyle(fontSize = 17.sp)
                             )
