@@ -1,38 +1,38 @@
 package com.example.lowvisionaidsbachelorthesis.components
 
+import android.annotation.SuppressLint
 import androidx.camera.view.LifecycleCameraController
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.lowvisionaidsbachelorthesis.R
 import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoney
 import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoneyRepository
 import com.example.lowvisionaidsbachelorthesis.textToSpeech.TTS
 import com.example.lowvisionaidsbachelorthesis.tflite.CameraPreview
 import com.example.lowvisionaidsbachelorthesis.tflite.Classification
-import com.example.lowvisionaidsbachelorthesis.ui.theme.Black
-import com.example.lowvisionaidsbachelorthesis.ui.theme.White
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
+import java.math.RoundingMode
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun ScanningScreen(navController: NavHostController, controller: LifecycleCameraController, classifications: List<Classification>, textToSpeech: TTS) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -50,61 +50,44 @@ fun ScanningScreen(navController: NavHostController, controller: LifecycleCamera
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
         ) {
-            classifications.forEach {
-                val number = extractNumber(it.name)
-                val unit = extractUnit(it.name)
-                textToSpeech.speak(number, 0)
-                textToSpeech.speak(unit, 500)
+            if(classifications.size != 0) {
+                val classification = classifications.lastOrNull()?.name!!
+                val currentRoute = navBackStackEntry?.destination?.route
+                val number = extractNumber(classification).toDoubleOrNull()
+                val unit = extractUnit(classification)
 
-                val formattedValue = formatValue(number.toDoubleOrNull(), unit)
-                var scannedMoney = ScannedMoney(1, formattedValue)
-                var totalValue: Double? = 0.0
-
-                coroutineScope.launch {
-                    //dodati da se brise ako je kliknuto na new scan, a da se sabira ako je continue
-                    //fetch from DB
-                    try {
-
-                        var valueFromDB = ScannedMoneyRepository.fetchFromDB(context)
-
-                        if (valueFromDB != null) {
-                            if (valueFromDB.isEmpty()) {
-                                val result = ScannedMoneyRepository.writeToDB(context, scannedMoney)
-                                valueFromDB = ScannedMoneyRepository.fetchFromDB(context)
-                            } else {
-
-
-                                totalValue = formattedValue?.let { it1 ->
-                                    valueFromDB!![0].totalValue?.plus(
-                                        it1
-                                    )
+                val value = formatValue(number, unit) ?: 0.00
+                println("VRIJEDNOST $value")
+                if (currentRoute?.startsWith("AfterScanScreen") != true)  {
+                    coroutineScope.launch {
+                        try {
+                            var valueFromDB = ScannedMoneyRepository.fetchFromDB(context)
+                            if (valueFromDB != null) {
+                                valueFromDB = if (valueFromDB.isEmpty()) {
+                                    ScannedMoneyRepository.writeToDB(context, ScannedMoney(1, value));
+                                    ScannedMoneyRepository.fetchFromDB(context)
+                                } else {
+                                    val totalValue = value.let { it1 ->
+                                        valueFromDB!![0].totalValue?.plus(
+                                            it1
+                                        )
+                                    }
+                                    val scannedMoney = ScannedMoney(1, totalValue)
+                                    ScannedMoneyRepository.updateDB(context, scannedMoney)
+                                    ScannedMoneyRepository.fetchFromDB(context)
                                 }
-                                scannedMoney = ScannedMoney(1, totalValue)
-
-                                val result = ScannedMoneyRepository.updateDB(context, scannedMoney)
-                                valueFromDB = ScannedMoneyRepository.fetchFromDB(context)
                             }
+                        } catch (error: Throwable) {
+                            println("Error: ${error.message}")
+                            error.printStackTrace()
                         }
-
-                    } catch (error: Throwable) {
-                        println("Error: ${error.message}")
-                        error.printStackTrace()
                     }
+                    navController.navigate(
+                        "AfterScanScreen/${value}"
+                    )
                 }
-
-                Text(
-                    text = it.name,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(White)
-                        .padding(8.dp),
-                    textAlign = TextAlign.Center,
-                    fontSize = 30.sp,
-                    color = Black
-                )
             }
         }
-        BottomNavigation(navController = navController, "scanningScreen")
     }
 }
 
@@ -117,11 +100,11 @@ fun extractNumber(input: String): String {
     return ""
 }
 
-@Composable   //zbog stringResource
+@Composable
 fun extractUnit(input: String): String {
     val regex = "[a-zA-Z]+".toRegex()
     val matchResult = regex.find(input)
-    var unit: String = ""
+    var unit = ""
     if (matchResult != null) {
         unit = matchResult.value
     }

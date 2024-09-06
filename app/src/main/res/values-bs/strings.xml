@@ -16,4 +16,6 @@
     <string name="search">Pretraga</string>
     <string name="choose_currency_text">Odaberite valutu</string>
     <string name="phening" translatable="false" tools:ignore="ExtraTranslation">feninga</string>
+    <string name="end_scanning">Završi skeniranje</string>
+    <string name="last_scanned_value">Zadnja skenirana vrijednost</string>
 </resources>

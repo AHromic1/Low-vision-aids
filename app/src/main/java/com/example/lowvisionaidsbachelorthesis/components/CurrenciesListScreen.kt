@@ -194,12 +194,10 @@ fun SearchResultItem(text: String, isLastItem: Boolean, onClick: () -> Unit) {
     }
 }
 
-
-
 @Composable
 fun BottomNavigation(navController: NavHostController, screenActivity: String){
-    var conversionEnabled: Boolean = true
-    var scanningEnabled: Boolean = true
+    var conversionEnabled = true
+    var scanningEnabled = true
 
     var conversionButtonColor = Martinique
     var scanningButtonColor = Martinique

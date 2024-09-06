@@ -16,4 +16,6 @@
     <string name="search">Search</string>
     <string name="choose_currency_text">Choose currency</string>
     <string name="phenings" translatable="false">fenings</string>
+    <string name="end_scanning">End scanning</string>
+    <string name="last_scanned_value">Last scanned value</string>
 </resources>

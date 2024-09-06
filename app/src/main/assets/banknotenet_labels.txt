@@ -1,3 +1,10 @@
+5 f
+10 f
+20 f
+50 f
+1 KM
+2 KM
+5 KM
 10 KM
 20 KM
 50 KM

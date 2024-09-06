@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     }
                 }
             }
-            val customSharedPreferences: CustomSharedPreferences = CustomSharedPreferences(applicationContext)
+            val customSharedPreferences = CustomSharedPreferences(applicationContext)
             storedExchangeRates = customSharedPreferences.getMap("exchange_rates")
 
             ////////////////////tflite//////////////////////////////////
@@ -122,8 +122,10 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 composable("WelcomeScreen") {
                     WelcomeScreen(navController = navController)
                 }
-                composable("AfterScanScreen") {
-                    AfterScanScreen(navController = navController)
+                composable("AfterScanScreen/{last_value}",  arguments = listOf(navArgument("last_value") { type = NavType.StringType })) {
+                        backStackEntry ->
+                    val value = backStackEntry.arguments?.getString("last_value")?: "0.00 KM"
+                    AfterScanScreen(navController = navController, value)
                 }
                 composable("CurrenciesListScreen") {
                     CurrenciesListScreen(navController = navController, exchangeRates = storedExchangeRates)

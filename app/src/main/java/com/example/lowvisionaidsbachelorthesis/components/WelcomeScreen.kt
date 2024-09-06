@@ -1,4 +1,3 @@
-import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,7 +11,6 @@ import androidx.compose.material.Text
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -69,9 +67,9 @@ fun InnerScreen(navController: NavHostController) {
 
     LaunchedEffect(context) {
         try {
-            val valueFromDB = ScannedMoneyRepository.fetchFromDB(context)?.get(0)?.totalValue ?: 0.0
+            val valueFromDB = ScannedMoneyRepository.fetchFromDB(context)?.get(0)?.totalValue ?: 0.00
             totalScannedValue = valueFromDB
-            roundedValue = BigDecimal(totalScannedValue).setScale(2, RoundingMode.CEILING)
+            roundedValue = BigDecimal(totalScannedValue).setScale(2, RoundingMode.HALF_EVEN)
         } catch (error: Throwable) {
             error.printStackTrace()
         }
@@ -213,7 +211,7 @@ fun InnerScreen(navController: NavHostController) {
 
 suspend fun goToNewScan(navController: NavHostController, context: Context) {
     try {
-        val result = ScannedMoneyRepository.deleteByIdFromDB(context, 1)
+        ScannedMoneyRepository.deleteByIdFromDB(context, 1)
         navController.navigate("ScanningScreen")
     } catch (error: Throwable) {
         error.printStackTrace()
