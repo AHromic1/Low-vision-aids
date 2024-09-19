@@ -18,13 +18,13 @@ import org.tensorflow.lite.task.vision.classifier.ImageClassifier
 
 class TfLiteLandmarkClassifier(
     private val context: Context,
-    private val threshold: Float = 0.95f,
+    private val threshold: Float = 0.6f,
     private val maxResults: Int = 1
 ): LandmarkClassifier {
 
     private var classifier: ImageClassifier? = null
 
-    private fun setupClassifier() {
+    private fun setupClassifier(modelPath: String, threshold: Float) {
         val baseOptions = BaseOptions.builder()
             .setNumThreads(2)
             .build()
@@ -37,7 +37,7 @@ class TfLiteLandmarkClassifier(
         try {
             classifier = ImageClassifier.createFromFileAndOptions(
                 context,
-                "model_with_metadata (1).tflite",
+                modelPath,
                 options
             )
         } catch (e: IllegalStateException) {
@@ -46,9 +46,8 @@ class TfLiteLandmarkClassifier(
     }
 
      override fun classify(bitmap: Bitmap, rotation: Int): List<Classification> {
-        if(classifier == null) {
-            setupClassifier()
-        }
+         setupClassifier("model_novcanice_kovanice (1).tflite", 0.6f)
+
 
          val resizedBitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true)
          val tensorImage = TensorImage.fromBitmap(resizedBitmap)
@@ -57,7 +56,14 @@ class TfLiteLandmarkClassifier(
              .setOrientation(getOrientationFromRotation(rotation))
              .build()
 
-         val results = classifier?.classify(tensorImage, imageProcessingOptions)
+         var results = classifier?.classify(tensorImage, imageProcessingOptions)
+
+         if(results?.get(0)?.categories?.isNotEmpty()!! && results.get(0)?.categories?.get(0)?.label == "novcanice")
+             setupClassifier("model_with_metadata (1).tflite", 0.9f)
+         else if(results.get(0)?.categories?.isNotEmpty()!! && results.get(0)?.categories?.get(0)?.label == "kovanice")
+             setupClassifier("metadata3.tflite", 0.9f)
+
+         results = classifier?.classify(tensorImage, imageProcessingOptions)
 
         return results?.flatMap { classifications ->
             classifications.categories.map { category ->

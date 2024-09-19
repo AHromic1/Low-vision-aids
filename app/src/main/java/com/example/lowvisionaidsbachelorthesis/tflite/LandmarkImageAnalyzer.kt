@@ -49,6 +49,7 @@ class LandmarkImageAnalyzer(
 
             val results = classifier.classify(resizedImage, rotationDegrees)
 
+            println("RESULTS $results")
             onResults(results)
         } else onResults(emptyList())
         frameSkipCounter++

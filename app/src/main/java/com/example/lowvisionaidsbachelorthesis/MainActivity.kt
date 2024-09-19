@@ -82,6 +82,9 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             storedExchangeRates = customSharedPreferences.getMap("exchange_rates")
 
             //tflite classification
+            var classification by remember {
+                mutableStateOf(emptyList<Classification>())
+            }
             val analyzer = remember {
                 LandmarkImageAnalyzer(
                     classifier = TfLiteLandmarkClassifier(
@@ -89,6 +92,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     ),
                     onResults = {
                         if(it.isNotEmpty()) LastClassification.setLast(it[0])
+                        classification += it
                     }
                 )
             }
@@ -107,7 +111,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
             NavHost(navController = navController, startDestination = "WelcomeScreen") {
                 composable("ScanningScreen") {
-                    ScanningScreen(navController = navController, controller = controller)
+                    ScanningScreen(navController = navController, controller = controller, classification = classification)
                 }
                 composable("WelcomeScreen") {
                     WelcomeScreen(navController = navController)

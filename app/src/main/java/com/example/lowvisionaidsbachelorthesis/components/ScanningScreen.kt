@@ -25,10 +25,12 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun ScanningScreen(navController: NavHostController, controller: LifecycleCameraController) {
+fun ScanningScreen(navController: NavHostController, controller: LifecycleCameraController, classification: List<Classification>) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+    println("LAST CLASSIFICATION 1 ${LastClassification.getLast()}")
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -45,6 +47,7 @@ fun ScanningScreen(navController: NavHostController, controller: LifecycleCamera
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
         ) {
+            println("LAST CLASSIFICATION 1 ${LastClassification.getLast()}")
             if(LastClassification.getLast().name.isNotBlank()) {
                 val classification = LastClassification.getLast().name
                 val currentRoute = navBackStackEntry?.destination?.route
