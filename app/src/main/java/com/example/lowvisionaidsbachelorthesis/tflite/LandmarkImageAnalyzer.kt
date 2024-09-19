@@ -14,13 +14,15 @@ class LandmarkImageAnalyzer(
 ): ImageAnalysis.Analyzer {
     private var frameSkipCounter = 0
 
-    private fun resizeImage(image: Bitmap, targetWidth: Int = 224, targetHeight: Int = 224): Bitmap {
+    private fun resizeImage(image: Bitmap): Bitmap {
         val width = image.width
         val height = image.height
         val aspectRatio = width.toFloat() / height.toFloat()
 
         val newWidth: Int
         val newHeight: Int
+        val targetHeight = 224
+        val targetWidth = 224
 
         if (width > height) {
             newWidth = targetWidth
@@ -45,11 +47,10 @@ class LandmarkImageAnalyzer(
         if(frameSkipCounter % 60 == 0) {
             val rotationDegrees = image.imageInfo.rotationDegrees
             val bitmap = image.toBitmap()
-            val resizedImage = resizeImage(bitmap, 224, 224)
+            val resizedImage = resizeImage(bitmap)
 
             val results = classifier.classify(resizedImage, rotationDegrees)
 
-            println("RESULTS $results")
             onResults(results)
         } else onResults(emptyList())
         frameSkipCounter++
