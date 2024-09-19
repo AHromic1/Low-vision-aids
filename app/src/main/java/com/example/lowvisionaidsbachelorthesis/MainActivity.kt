@@ -40,7 +40,6 @@ import com.example.lowvisionaidsbachelorthesis.tflite.Classification
 import com.example.lowvisionaidsbachelorthesis.tflite.LandmarkImageAnalyzer
 import com.example.lowvisionaidsbachelorthesis.tflite.TfLiteLandmarkClassifier
 
-
 class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private val exchangeRatesViewModel by viewModels<ExchangeRatesViewModel>()
@@ -51,25 +50,18 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //////////////////tflite//////////////////////
+        //tflite
         if(!hasCameraPermission()) {
             ActivityCompat.requestPermissions(
                 this, arrayOf(Manifest.permission.CAMERA), 0
             )
         }
-        /////////////////////////////////////////////
 
         tts = TTS(this)
-
         textToSpeech = TextToSpeech(this, this)
-
         dateTime = LocalDateTime.now()
 
-
-
-
         setContent {
-
             var storedExchangeRates by remember { mutableStateOf<Map<String, Double>?>(null) }
 
             LaunchedEffect(applicationContext) {
@@ -89,17 +81,14 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             val customSharedPreferences = CustomSharedPreferences(applicationContext)
             storedExchangeRates = customSharedPreferences.getMap("exchange_rates")
 
-            ////////////////////tflite//////////////////////////////////
-            var classifications by remember {
-                mutableStateOf(emptyList<Classification>())
-            }
+            //tflite classification
             val analyzer = remember {
                 LandmarkImageAnalyzer(
                     classifier = TfLiteLandmarkClassifier(
                         context = applicationContext
                     ),
                     onResults = {
-                        classifications = it
+                        if(it.isNotEmpty()) LastClassification.setLast(it[0])
                     }
                 )
             }
@@ -112,12 +101,13 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     )
                 }
             }
-            ////////////////////////////////////////////////////////
+
+            //navigation
             val navController = rememberNavController()
 
             NavHost(navController = navController, startDestination = "WelcomeScreen") {
                 composable("ScanningScreen") {
-                    ScanningScreen(navController = navController, controller = controller, classifications = classifications, textToSpeech = tts)
+                    ScanningScreen(navController = navController, controller = controller)
                 }
                 composable("WelcomeScreen") {
                     WelcomeScreen(navController = navController)
@@ -186,7 +176,8 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             false
         }
     }
-    /////////////////////TTS////////////////
+
+    //Text to speech
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
             val defaultLocale = Locale.getDefault()

@@ -2,18 +2,23 @@ package com.example.lowvisionaidsbachelorthesis.tflite
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
+import android.graphics.Paint
 import android.util.Size
 import android.view.Surface
 import kotlinx.coroutines.awaitAll
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
+import org.tensorflow.lite.support.image.ops.ResizeOp
 import org.tensorflow.lite.task.core.BaseOptions
 import org.tensorflow.lite.task.core.vision.ImageProcessingOptions
 import org.tensorflow.lite.task.vision.classifier.ImageClassifier
 
 class TfLiteLandmarkClassifier(
     private val context: Context,
-    private val threshold: Float = 0.1f,
+    private val threshold: Float = 0.95f,
     private val maxResults: Int = 1
 ): LandmarkClassifier {
 
@@ -26,13 +31,13 @@ class TfLiteLandmarkClassifier(
         val options = ImageClassifier.ImageClassifierOptions.builder()
             .setBaseOptions(baseOptions)
             .setMaxResults(maxResults)
-            //.setScoreThreshold(threshold)
+            .setScoreThreshold(threshold)
             .build()
 
         try {
             classifier = ImageClassifier.createFromFileAndOptions(
                 context,
-                "metadata3.tflite",
+                "model_with_metadata (1).tflite",
                 options
             )
         } catch (e: IllegalStateException) {
@@ -45,16 +50,14 @@ class TfLiteLandmarkClassifier(
             setupClassifier()
         }
 
-        val imageProcessor = ImageProcessor.Builder().build()
-        val tensorImage = imageProcessor.process(TensorImage.fromBitmap(bitmap))
+         val resizedBitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true)
+         val tensorImage = TensorImage.fromBitmap(resizedBitmap)
 
-        val imageProcessingOptions = ImageProcessingOptions.builder()
-            .setOrientation(getOrientationFromRotation(rotation))
-            .build()
+         val imageProcessingOptions = ImageProcessingOptions.builder()
+             .setOrientation(getOrientationFromRotation(rotation))
+             .build()
 
-        val results = classifier?.classify(tensorImage, imageProcessingOptions)
-
-        println("RESULTS $results")
+         val results = classifier?.classify(tensorImage, imageProcessingOptions)
 
         return results?.flatMap { classifications ->
             classifications.categories.map { category ->
@@ -73,5 +76,23 @@ class TfLiteLandmarkClassifier(
             Surface.ROTATION_180 -> ImageProcessingOptions.Orientation.RIGHT_BOTTOM
             else -> ImageProcessingOptions.Orientation.RIGHT_TOP
         }
+    }
+
+    // Function to normalize the bitmap according to model's metadata
+    private fun normalizeBitmap(bitmap: Bitmap): Bitmap {
+        val width = bitmap.width
+        val height = bitmap.height
+
+        val normalizedBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+
+        val canvas = Canvas(normalizedBitmap)
+        val paint = Paint()
+
+        val colorMatrix = ColorMatrix()
+        colorMatrix.setScale(1f / 127.5f, 1f / 127.5f, 1f / 127.5f, 1f) // Normalization
+        paint.colorFilter = ColorMatrixColorFilter(colorMatrix)
+
+        canvas.drawBitmap(bitmap, 0f, 0f, paint)
+        return normalizedBitmap
     }
 }

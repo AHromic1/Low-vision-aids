@@ -19,45 +19,39 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.lowvisionaidsbachelorthesis.R
 import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoney
 import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoneyRepository
-import com.example.lowvisionaidsbachelorthesis.textToSpeech.TTS
 import com.example.lowvisionaidsbachelorthesis.tflite.CameraPreview
 import com.example.lowvisionaidsbachelorthesis.tflite.Classification
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
-import java.math.RoundingMode
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun ScanningScreen(navController: NavHostController, controller: LifecycleCameraController, classifications: List<Classification>, textToSpeech: TTS) {
+fun ScanningScreen(navController: NavHostController, controller: LifecycleCameraController) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
-    ) {//relativna pozicija
+    ) {
         val screenHeight = maxHeight
-        val desiredHeight = screenHeight * 0.85f
 
         CameraPreview(controller,
             Modifier
                 .fillMaxWidth()
-                .height(desiredHeight))
+                .height(screenHeight))
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
         ) {
-            if(classifications.size != 0) {
-                val classification = classifications.lastOrNull()?.name!!
+            if(LastClassification.getLast().name.isNotBlank()) {
+                val classification = LastClassification.getLast().name
                 val currentRoute = navBackStackEntry?.destination?.route
                 val number = extractNumber(classification).toDoubleOrNull()
                 val unit = extractUnit(classification)
 
                 val value = formatValue(number, unit) ?: 0.00
-                println("VRIJEDNOST $value")
                 if (currentRoute?.startsWith("AfterScanScreen") != true)  {
                     coroutineScope.launch {
                         try {
@@ -82,9 +76,8 @@ fun ScanningScreen(navController: NavHostController, controller: LifecycleCamera
                             error.printStackTrace()
                         }
                     }
-                    navController.navigate(
-                        "AfterScanScreen/${value}"
-                    )
+                    LastClassification.setLast(Classification("", 0.0f))
+                    navController.navigate("AfterScanScreen/${value}")
                 }
             }
         }

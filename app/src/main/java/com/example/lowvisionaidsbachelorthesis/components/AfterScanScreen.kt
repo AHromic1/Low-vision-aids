@@ -20,19 +20,13 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.lowvisionaidsbachelorthesis.R
-import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoney
-import com.example.lowvisionaidsbachelorthesis.database_dao.ScannedMoneyRepository
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Linen
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Martinique
 import com.example.lowvisionaidsbachelorthesis.ui.theme.Smoky
-import kotlinx.coroutines.launch
 import java.math.BigDecimal
-import java.math.RoundingMode
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
@@ -118,7 +112,8 @@ fun AfterScanScreen(navController: NavHostController, lastValue: String) {
                         Spacer(modifier = Modifier.height(35.dp))
                         Button(
                             onClick = {
-                                navController.navigate("ScanningScreen") },
+                                navController.navigate("ScanningScreen")
+                                },
                             modifier = Modifier.fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(Smoky),
                             shape = RoundedCornerShape(8.dp)
